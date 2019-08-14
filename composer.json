@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Springbot",
+    "type": "magento-module",
+    "license": "Open-Software-License-(OSL)",
+    "homepage": "",
+    "description": "Springbot helps merchants drive marketing actions based on insights from its “big data” analytics engine",
+    "authors": [
+    {
+        "name": "Springbot ",
+        "email": "bseitz@springbot.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
