@@ -31,7 +31,7 @@ class Springbot_Combine_Model_Cron_Queue extends Springbot_Combine_Model_Cron
 			'run_at' => now(),
 			'locked_at' => now(),
 			'locked_by' => getmypid(),
-			'next_run_at' => null,
+			'next_run_at' => $this->_calculateNextRunAt(),
 			'error' => null
 		));
 		$this->save();
@@ -40,6 +40,11 @@ class Springbot_Combine_Model_Cron_Queue extends Springbot_Combine_Model_Cron
 	public function run()
 	{
 		try {
+			$maxJobTime = Mage::getStoreConfig('springbot/advanced/max_job_time');
+			if (is_int($maxJobTime)) {
+				set_time_limit(Mage::getStoreConfig('springbot/advanced/max_job_time'));
+			}
+
 			$return = true;
 			$class = $this->getInstance();
 
@@ -55,7 +60,6 @@ class Springbot_Combine_Model_Cron_Queue extends Springbot_Combine_Model_Cron
 			$this->setError($e->getMessage());
 			// Lower priority for failed job - keeping order intact
 			$this->setPriority($this->getPriority() + Springbot_Services::FAILED);
-			$this->setNextRunAt($this->_calculateNextRunAt());
 			$return = false;
 			if ($this->getAttempts() >= Springbot_Combine_Model_Resource_Cron_Queue_Collection::ATTEMPT_LIMIT) {
 				Springbot_Log::remote(

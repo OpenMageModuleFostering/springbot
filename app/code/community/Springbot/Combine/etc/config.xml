@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Springbot_Combine>
-			<version>1.4.2.1</version>
+			<version>1.4.3.0</version>
 		</Springbot_Combine>
 	</modules>
 	<global>
@@ -96,6 +96,7 @@
 				<product_url_type>default</product_url_type>
 				<assets_domain>d2z0bn1jv8xwtk.cloudfront.net</assets_domain>
 				<scrape_coupons>0</scrape_coupons>
+				<max_job_time>60</max_job_time>
 			</advanced>
 			<cart_restore>
 				<do_restore>1</do_restore>

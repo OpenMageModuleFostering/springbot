@@ -75,4 +75,5 @@ class Springbot_Combine_Model_Parser_Quote extends Springbot_Combine_Model_Parse
 	{
 		return Mage::helper('combine/trackable')->getTrackablesHashByQuote($quoteId);
 	}
+
 }

@@ -171,11 +171,11 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 	public function hasImage($product)
 	{
 		if($product instanceof Mage_Catalog_Model_Product) {
-			if(($image = $product->getImage()) != 'no_selection' && $image ) {
+			if(($image = $product->getImage()) && $this->_exists($image) ) {
 				return true;
-			} else if(($image = $product->getSmallImage()) != 'no_selection' && $image ) {
+			} else if(($image = $product->getSmallImage()) && $this->_exists($image) ) {
 				return true;
-			} else if(($image = $product->getThumbnail()) != 'no_selection' && $image ) {
+			} else if(($image = $product->getThumbnail()) && $this->_exists($image) ) {
 				return true;
 			} else if($product instanceof Mage_Catalog_Model_Product) {
 				if($gallery = $product->getMediaGalleryImages()) {
@@ -218,13 +218,13 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 				}
 				return (string) $img;
 			}
-			else if(($image = $product->getImage()) != 'no_selection' && $image ) {
+			else if(($image = $product->getImage()) && $this->_exists($image) ) {
 				// main
 			}
-			else if(($image = $product->getSmallImage()) != 'no_selection' && $image ) {
+			else if(($image = $product->getSmallImage()) && $this->_exists($image) ) {
 				// small
 			}
-			else if(($image = $product->getThumbnail()) != 'no_selection' && $image ) {
+			else if(($image = $product->getThumbnail()) && $this->_exists($image) ) {
 				// thumbnail
 			}
 			else if ($product->getMediaGalleryImages() && $product->getMediaGalleryImages()->getSize() > 0) {
@@ -232,7 +232,7 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 				return $product->getMediaGalleryImages()->getFirstItem()->getUrl();
 			}
 			else {
-				// if all else fails, build cached image
+				// if we get here, the image doesn't exist, return null
 				return null;
 			}
 
@@ -246,6 +246,12 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 	public function isTransactionalEmail($email)
 	{
 		return array_search($email, $this->_getTransEmails()) !== false;
+	}
+
+	protected function _exists($file, $type = Mage_Core_Model_Store::URL_TYPE_MEDIA)
+	{
+		$file = Mage::getBaseDir($type) . '/catalog/product/' . $file;
+		return file_exists($file);
 	}
 
 	protected function _getTransEmails()

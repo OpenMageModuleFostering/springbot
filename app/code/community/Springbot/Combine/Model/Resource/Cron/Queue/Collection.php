@@ -41,8 +41,6 @@ class Springbot_Combine_Model_Resource_Cron_Queue_Collection extends Mage_Core_M
 			$this->getSelect()->where('queue = "' . $queue .'" ');
 		}
 
-		Springbot_Log::debug((string) $this->getSelect());
-
 		return $this;
 	}
 

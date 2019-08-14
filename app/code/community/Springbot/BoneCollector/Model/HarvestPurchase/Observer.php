@@ -98,11 +98,17 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 
 	private function _getRedirectIds($frontend = true, $order)
 	{
-		$redirects = $frontend ? Mage::helper('combine/redirect')->getRedirectIds() : array();
+		if ($frontend) {
+			$redirects = Mage::helper('combine/redirect')->getRedirectIds();
+		}
+		else {
+			$redirects = array();
+		}
+
 		$customerEmail = $order->getCustomerEmail();
 		if ($dbRedirects = Mage::helper('combine/redirect')->getRedirectsByEmail($customerEmail, $order->getCreatedAt())) {
 			$redirects = array_unique(array_merge($redirects, $dbRedirects));
 		}
-		return array_values($redirects);
+		return array_reverse(array_values($redirects));
 	}
 }

@@ -188,4 +188,19 @@ class Springbot_Boss
 		$token = Mage::getStoreConfig('springbot/config/security_token');
 		return !empty($token);
 	}
+
+	public static function setCookie($name, $value)
+	{
+		Springbot_Log::debug("Saving cookie $name : $value");
+
+		Mage::getModel('core/cookie')->set(
+			$name,
+			$value,
+			strtotime('+365 days'),
+			'/', // path
+			null, // domain
+			null, // secure
+			false // httpOnly
+		);
+	}
 }

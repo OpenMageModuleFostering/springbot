@@ -25,7 +25,7 @@ abstract class Springbot_Combine_Model_Parser extends Varien_Object
 		if(!$this->isParsed()) {
 			$this->_parse();
 		}
-		$this->prune();
+		//$this->prune();
 		return parent::toJson($arrAttributes);
 	}
 

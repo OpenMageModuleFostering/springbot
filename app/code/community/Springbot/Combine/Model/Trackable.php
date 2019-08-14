@@ -50,7 +50,7 @@ class Springbot_Combine_Model_Trackable extends Mage_Core_Model_Abstract
 	{
 		if (!$this->isObjectEmpty($params)) {
 			$encoded = base64_encode(json_encode($params));
-			$this->_setCookie(Springbot_Boss::SB_TRACKABLES_COOKIE, $encoded);
+			Springbot_Boss::setCookie(Springbot_Boss::SB_TRACKABLES_COOKIE, $encoded);
 		}
 	}
 
@@ -73,20 +73,7 @@ class Springbot_Combine_Model_Trackable extends Mage_Core_Model_Abstract
 		return !$this->isObjectEmpty($sbParams) ? $sbParams : new stdClass();
 	}
 
-	protected function _setCookie($name, $value)
-	{
-		Springbot_Log::debug("Saving cookie $name : $value");
 
-		Mage::getModel('core/cookie')->set(
-			$name,
-			$value,
-			strtotime('+365 days'),
-			'/', // path
-			null, // domain
-			null, // secure
-			false // httpOnly
-		);
-	}
 
 
 }

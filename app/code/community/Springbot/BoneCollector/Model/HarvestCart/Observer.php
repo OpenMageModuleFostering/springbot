@@ -32,8 +32,7 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 
 					Springbot_Boss::scheduleJob('post:cart', array(
 							's' => Mage::app()->getStore()->getId(),
-							'i' => $quoteParser->getQuoteId(),
-							'r' => Mage::helper('combine/redirect')->getRawEscapedCookie()
+							'i' => $quoteParser->getQuoteId()
 						), Springbot_Services::LISTENER, 'listener'
 					);
 
@@ -187,5 +186,6 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 	{
 		return Mage::helper('combine')->getLastCategoryId();
 	}
+
 
 }
