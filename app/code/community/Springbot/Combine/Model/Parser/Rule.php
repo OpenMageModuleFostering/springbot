@@ -1,6 +1,6 @@
 <?php
 
-class Springbot_Combine_Model_Parser_Rule extends Springbot_Combine_Model_Parser_Abstract
+class Springbot_Combine_Model_Parser_Rule extends Springbot_Combine_Model_Parser
 {
 	protected $_rule;
 	protected $_accessor = '_rule';
@@ -9,14 +9,6 @@ class Springbot_Combine_Model_Parser_Rule extends Springbot_Combine_Model_Parser
 	{
 		$this->_rule = $rule;
 		$this->_parse();
-	}
-
-	public function parse($rule)
-	{
-		$this->_rule = $rule;
-		$this->_parse();
-
-		return $this;
 	}
 
 	protected function _parse()

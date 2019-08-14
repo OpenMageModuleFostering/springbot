@@ -1,26 +1,25 @@
 <?php
 
-class Springbot_Combine_Model_Abstract extends Mage_Core_Model_Abstract
+class Springbot_Combine_Model_Cron extends Mage_Core_Model_Abstract
 {
-	/**
-	 * Insert ignore into collection
-	 */
+	protected function _validate()
+	{
+		return true;
+	}
+
 	public function insertIgnore()
 	{
 		try {
 			if($this->_validate()) {
 				$this->_getResource()->insertIgnore($this);
 			}
-		} catch(Exception $e) {
+		}
+		catch(Exception $e) {
 			$this->_getResource()->rollBack();
 			Springbot_Log::error($e);
 		}
-
 		return $this;
 	}
 
-	protected function _validate()
-	{
-		return true;
-	}
+
 }

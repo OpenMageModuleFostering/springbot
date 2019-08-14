@@ -1,6 +1,6 @@
 <?php
 
-class Springbot_Combine_Model_Parser_Quote extends Springbot_Combine_Model_Parser_Abstract
+class Springbot_Combine_Model_Parser_Quote extends Springbot_Combine_Model_Parser
 {
 	protected $_quote;
 	protected $_accessor = '_quote';
@@ -11,14 +11,6 @@ class Springbot_Combine_Model_Parser_Quote extends Springbot_Combine_Model_Parse
 		$this->_items = array();
 		$this->_quote = $quote;
 		$this->_parse();
-	}
-
-	public function parse(Mage_Sales_Model_Quote $quote)
-	{
-		$this->_items = array();
-		$this->_quote = $quote;
-		$this->_parse();
-		return $this;
 	}
 
 	public function getItemsCount()

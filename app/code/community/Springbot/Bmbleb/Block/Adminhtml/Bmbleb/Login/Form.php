@@ -77,8 +77,7 @@ class Springbot_Bmbleb_Block_Adminhtml_Bmbleb_Login_Form extends Mage_Adminhtml_
 			$client->setRawData($rawJSON);
 			$req = $client->request('POST');
 		} catch (Exception $e) {
-			Mage::log('Remote Springbot service unavailable!');
-			Mage::logException($e);
+			Springbot_Log::error($e);
 		}
 	}
 

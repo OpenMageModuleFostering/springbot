@@ -11,11 +11,12 @@ class Springbot_BoneCollector_Model_HarvestSubscriber_Observer extends Springbot
 			Springbot_Boss::scheduleJob(
 				'post:subscriber',
 				array('i' => $subscriberId),
-				Springbot_Services_Priority::LISTENER,
+				Springbot_Services::LISTENER,
 				'listener'
 			);
 
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			Springbot_Log::error($e);
 		}
 	}
@@ -29,7 +30,8 @@ class Springbot_BoneCollector_Model_HarvestSubscriber_Observer extends Springbot
 				'start_id' => $observer->getEvent()->getSubscriber()->getId(),
 				'delete' => true,
 			))->run();
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			Springbot_Log::error($e);
 		}
 	}

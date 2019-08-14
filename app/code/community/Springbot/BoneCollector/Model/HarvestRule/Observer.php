@@ -2,7 +2,6 @@
 
 class Springbot_BoneCollector_Model_HarvestRule_Observer extends Springbot_BoneCollector_Model_HarvestAbstract
 {
-	protected $_coupon;
 	protected $_attributes = array(
 		'is_active',
 		'name' ,
@@ -38,20 +37,25 @@ class Springbot_BoneCollector_Model_HarvestRule_Observer extends Springbot_BoneC
 
 			if ($this->_entityChanged($this->_rule)) {
 				$ruleId = $this->_rule->getId();
-				$websiteIds = explode(',', $this->_rule->getWebsiteIds());
-				foreach ($websiteIds as $websiteId) {
+
+				foreach ($this->_getWebsiteIds() as $websiteId) {
 					if ($website = Mage::app()->getWebsite($websiteId)) {
 						foreach ($website->getGroups() as $group) {
 							$stores = $group->getStores();
 							foreach ($stores as $store) {
-								Springbot_Boss::scheduleJob('post:rule', array('i' => $ruleId, 's' => $store->getId()), Springbot_Services_Priority::LISTENER, 'listener');
+								Springbot_Boss::scheduleJob(
+									'post:rule',
+									array('i' => $ruleId, 's' => $store->getId()),
+									Springbot_Services::LISTENER,
+									'listener'
+								);
 							}
 						}
 					}
 				}
 			}
-
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			Springbot_Log::error($e);
 		}
 
@@ -63,15 +67,28 @@ class Springbot_BoneCollector_Model_HarvestRule_Observer extends Springbot_BoneC
 			// Runs blocking in session to guarantee record existence
 			$rule = $observer->getEvent()->getRule()->getPrimaryCoupon();
 			$this->_initObserver($observer);
-			Mage::getModel('Springbot_Services_Post_Rule')->setData(array(
-				'start_id' => $rule->getId(),
-				'delete' => true,
-			))->run();
-
-		} catch (Exception $e) {
+			Springbot_Boss::scheduleJob(
+				'post:rule',
+				array('i' => $rule->getId(), 'd' => true),
+				Springbot_Services::LISTENER,
+				'listener'
+			);
+		}
+		catch (Exception $e) {
 			Springbot_Log::error($e);
 		}
 	}
 
+	protected function _getWebsiteIds()
+	{
+		$ids = $this->_rule->getWebsiteIds();
+		if(is_string($ids)) {
+			$ids = explode(',', $ids);
+		}
+		if(!is_array($ids)) {
+			$ids = array();
+		}
+		return $ids;
+	}
 }
 

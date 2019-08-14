@@ -1,6 +1,6 @@
 <?php
 
-class Springbot_Combine_Model_Parser_Coupon extends Springbot_Combine_Model_Parser_Abstract
+class Springbot_Combine_Model_Parser_Coupon extends Springbot_Combine_Model_Parser
 {
 	protected $_coupon;
 	protected $_accessor = '_coupon';
@@ -9,14 +9,6 @@ class Springbot_Combine_Model_Parser_Coupon extends Springbot_Combine_Model_Pars
 	{
 		$this->_coupon = $coupon;
 		$this->_parse();
-	}
-
-	public function parse($coupon)
-	{
-		$this->_coupon = $coupon;
-		$this->_parse();
-
-		return $this;
 	}
 
 	protected function _parse()

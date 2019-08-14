@@ -1,15 +1,22 @@
 <?php
 
+/**
+ * Class: Springbot_Log
+ *
+ * @author Springbot Magento Integration Team <magento@springbot.com>
+ * @version 1.4.0.0
+ * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
 class Springbot_Log
 {
-    const EMERG   = 0;  // Emergency: system is unusable
-    const ALERT   = 1;  // Alert: action must be taken immediately
-    const CRIT    = 2;  // Critical: critical conditions
-    const ERR     = 3;  // Error: error conditions
-    const WARN    = 4;  // Warning: warning conditions
-    const NOTICE  = 5;  // Notice: normal but significant condition
-    const INFO    = 6;  // Informational: informational messages
-    const DEBUG   = 7;  // Debug: debug messages
+	const EMERG   = 0;  // Emergency: system is unusable
+	const ALERT   = 1;  // Alert: action must be taken immediately
+	const CRIT    = 2;  // Critical: critical conditions
+	const ERR     = 3;  // Error: error conditions
+	const WARN    = 4;  // Warning: warning conditions
+	const NOTICE  = 5;  // Notice: normal but significant condition
+	const INFO    = 6;  // Informational: informational messages
+	const DEBUG   = 7;  // Debug: debug messages
 
 	const LOGFILE = 'Springbot.log';
 	const ERRFILE = 'Springbot.err';
@@ -80,8 +87,22 @@ class Springbot_Log
 		self::_log($message, Zend_Log::INFO);
 	}
 
-	public static function error(Exception $e)
+    public static function getSpringbotErrorLog()
+    {
+        return Mage::getBaseDir('log') . DS . Springbot_Log::ERRFILE;
+    }
+
+    public static function getSpringbotLog()
+    {
+        return Mage::getBaseDir('log') . DS . Springbot_Log::LOGFILE;
+    }
+
+
+    public static function error(Exception $e)
 	{
+		if(is_string($e)) {
+			$e = new Exception($e);
+		}
 		self::_log("\n" . $e->__toString(), Zend_Log::ERR, 'default', self::ERRFILE);
 	}
 
@@ -133,5 +154,7 @@ class Springbot_Log
 	{
 		Springbot_Log::harvest('--------------------------------------------------------------------------------', $remote);
 	}
+
+
 
 }

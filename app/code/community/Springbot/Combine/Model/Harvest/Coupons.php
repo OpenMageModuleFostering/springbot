@@ -1,27 +1,38 @@
 <?php
 
-class Springbot_Combine_Model_Harvest_Coupons extends Springbot_Combine_Model_Harvest_Abstract implements Springbot_Combine_Model_Harvester
+class Springbot_Combine_Model_Harvest_Coupons extends Springbot_Combine_Model_Harvest
 {
-	protected $_mageModel = 'salesrule/coupon';
-	protected $_parserModel = 'combine/parser_coupon';
-	protected $_apiController = 'coupons';
-	protected $_apiModel = 'coupons';
-	protected $_rowId = 'coupon_id';
+
+	public function getMageModel()
+	{
+		return 'salesrule/coupon';
+	}
+
+	public function getParserModel()
+	{
+		return 'combine/parser_coupon';
+	}
+
+	public function getApiController()
+	{
+		return 'coupons';
+	}
+
+	public function getApiModel()
+	{
+		return 'coupons';
+	}
+
+	public function getRowId()
+	{
+		return 'coupon_id';
+	}
 
 	public function loadMageModel($entityId)
 	{
-		$this->_model = Mage::getModel($this->_getMageModel());
-		$this->_model->setStoreId($this->_storeId);
-		$this->_model->load($entityId);
-		return $this->_model;
+		$model = Mage::getModel($this->getMageModel());
+		$model->setStoreId($this->getStoreId());
+		$model->load($entityId);
+		return $model;
 	}
-
-	public function parse($model)
-	{
-		$model->setStoreId($this->_storeId);
-		$parser = $this->_getParser($model)->parse($model);
-		$parser->setDataSource($this->getDataSource());
-		return $parser->getData();
-	}
-
 }

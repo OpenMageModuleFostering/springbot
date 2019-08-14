@@ -1,13 +1,13 @@
 {
     "name": "OpenMageModuleFostering/Springbot",
     "type": "magento-module",
-    "license": "Open-Software-License-(OSL)",
+    "license": "Open-Software-License-v3.0-(OSL-3.0)",
     "homepage": "",
     "description": "Springbot helps merchants drive marketing actions based on insights from its “big data” analytics engine",
     "authors": [
     {
-        "name": "Springbot ",
-        "email": "bseitz@springbot.com"
+        "name": "Springbot Integrations Team",
+        "email": "magento@springbot.com"
     }
 ],
     "suggest": {

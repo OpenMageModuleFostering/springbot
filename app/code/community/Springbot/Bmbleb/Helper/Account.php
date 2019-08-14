@@ -53,7 +53,7 @@ class Springbot_Bmbleb_Helper_Account extends Mage_Core_Helper_Abstract
 			if ($email == '' && $password == ''){
 				return false;
 			}
-			$account = $this->checkCredentials($email, $password);
+			$account = Mage::helper('combine')->checkCredentials($email, $password);
 			if ($account['valid']) {
 				$result = true;
 				if ($saveCredentials){

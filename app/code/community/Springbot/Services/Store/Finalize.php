@@ -1,6 +1,6 @@
 <?php
 
-class Springbot_Services_Store_Finalize extends Springbot_Services_Abstract
+class Springbot_Services_Store_Finalize extends Springbot_Services
 {
 
 	public function run()

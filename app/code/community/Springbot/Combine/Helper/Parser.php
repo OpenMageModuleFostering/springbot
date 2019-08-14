@@ -76,10 +76,9 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 		}
 	}
 
-	public function isAccessible($product)
+	public function isAccessible(Mage_Catalog_Model_Product $product)
 	{
 		return
-			($product instanceof Mage_Catalog_Model_Product) &&
 			!(
 				$product->getVisibility() == Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE ||
 				$product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_DISABLED
@@ -138,7 +137,11 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 			$code = $attribute->getAttributeCode();
 
 			if($attribute->usesSource()) {
-				$value = $product->getAttributeText($code);
+				try {
+					$value = $this->_getAttributeText($product, $code);
+				} catch (Mage_Eav $e) {
+					Springbot_Log::debug(print_r($e->getMessage(), true));
+				}
 			} else {
 				$value = $product->getData($code);
 			}
@@ -147,6 +150,21 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 		}
 
 		return $return;
+	}
+
+	private function _getAttributeText($product, $attributeCode) {
+		$resource = $product->getResource();
+		if (is_object($resource)) {
+			$attribute = $resource->getAttribute($attributeCode);
+			$sourceModel = Mage::getModel($attribute->getSourceModel());
+			if (is_object($attribute) && $sourceModel) {
+				$source = $attribute->getSource();
+				if (is_object($source)) {
+					return $source->getOptionText($product->getAttributeText($attributeCode));
+				}
+			}
+		}
+		return null;
 	}
 
 	public function hasImage($product)
@@ -198,16 +216,21 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 					$img->resize($size);
 				}
 				return (string) $img;
-			} else if(($image = $product->getImage()) != 'no_selection' && $image ) {
+			}
+			else if(($image = $product->getImage()) != 'no_selection' && $image ) {
 				// main
-			} else if(($image = $product->getSmallImage()) != 'no_selection' && $image ) {
+			}
+			else if(($image = $product->getSmallImage()) != 'no_selection' && $image ) {
 				// small
-			} else if(($image = $product->getThumbnail()) != 'no_selection' && $image ) {
+			}
+			else if(($image = $product->getThumbnail()) != 'no_selection' && $image ) {
 				// thumbnail
-			} else if ($product->getMediaGalleryImages() && $product->getMediaGalleryImages()->getSize() > 0) {
+			}
+			else if ($product->getMediaGalleryImages() && $product->getMediaGalleryImages()->getSize() > 0) {
 				// First item from gallery
-				$image = $product->getMediaGalleryImages()->getFirstItem()->getUrl();
-			} else {
+				return $product->getMediaGalleryImages()->getFirstItem()->getUrl();
+			}
+			else {
 				// if all else fails, build cached image
 				return null;
 			}

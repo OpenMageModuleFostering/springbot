@@ -45,12 +45,12 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function checkCredentials($email = null, $password = null)
 	{
-		$return = array('valid' => false);
-
 		try {
+			$return = array('valid' => false);
 			$this->requestSecurityToken($email, $password, true);
 			$return['valid'] = true;
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$return['message'] = $e->getMessage();
 		}
 		return $return;
@@ -75,12 +75,13 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 
 	protected function _resolvePassword($email = null, $password = null)
 	{
-		if(is_null($email) || is_null($password)) {
+		if (is_null($email) || is_null($password)) {
 			$payload = array(
 				'user_id' => Mage::getStoreConfig('springbot/config/account_email'),
 				'password' => Mage::helper('core')->decrypt(Mage::getStoreConfig('springbot/config/account_password')),
 			);
-		} else {
+		}
+		else {
 			$payload = array(
 				'user_id' => $email,
 				'password' => $password,
@@ -203,53 +204,32 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 		);
 	}
 
-	public function getSpringbotErrorLog()
-	{
-		return Mage::getBaseDir('log') . DS . Springbot_Log::ERRFILE;
-	}
-
-	public function getSpringbotLog()
-	{
-		return Mage::getBaseDir('log') . DS . Springbot_Log::LOGFILE;
-	}
-
-	public function isEmpty($obj)
-	{
-		return count((array) $obj) == 0;
-	}
-
-	public function nohup()
-	{
-		return Mage::getStoreConfig('springbot/advanced/nohup') ? 'nohup' : '';
-	}
-
-	public function nice()
-	{
-		return Mage::getStoreConfig('springbot/advanced/nice') ? 'nice' : '';
-	}
-
 	public function getLogContents($logName)
 	{
 		$maxRecSize = 65536;
-		if (empty($logName)) {
-			$fullFilename = Mage::getBaseDir('log') . DS . Springbot_Log::LOGFILE;
-		} else {
-			$fullFilename = Mage::getBaseDir('log') . DS . str_replace('../', '', $logName);
-		}
+
+        if (empty($logName)) {
+            $fullFilename = Springbot_Log::getSpringbotLog();
+        }
+		else {
+			// Remove directory traversals for security
+            $fullFilename = Mage::getBaseDir('log') . DS . str_replace('../', '', $logName);
+        }
 
 		$buffer = '';
-		if(file_exists($fullFilename)) {
+		if (file_exists($fullFilename)) {
 			if (($fHandle = fopen($fullFilename, 'r')) !== FALSE) {
-				$fSize  = filesize($fullFilename)/1024;
+				$fSize = filesize($fullFilename) / 1024;
 				if ($fSize > 32) {
 					fseek($fHandle, 1024*($fSize-32));
 				}
 				while (!feof($fHandle)) {
 					$buffer .= fgets($fHandle,$maxRecSize) . ' ';
 				}
-				fclose ($fHandle);
-			} else {
-				$buffer='Open failed on '.$fullFilename;
+				fclose($fHandle);
+			}
+			else {
+				$buffer = 'Open failed on '.$fullFilename;
 			}
 		}
 		return $buffer;

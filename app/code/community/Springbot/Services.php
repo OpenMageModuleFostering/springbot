@@ -1,9 +1,23 @@
 <?php
 
-abstract class Springbot_Services_Abstract extends Varien_Object
+/**
+ * Class: Springbot_Services
+ *
+ * @author Springbot Magento Integration Team <magento@springbot.com>
+ * @version 1.4.0.0
+ * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @abstract
+ */
+abstract class Springbot_Services extends Varien_Object
 {
+	const HARVEST = 0;
+	const PARTITION = 1;
+	const SEGMENT = 2;
+	const CATEGORY = 3;
+	const LISTENER = 5;
+	const FAILED = 8;
+
 	protected $_type = 'items';
-	protected $_harvester;
 	protected $_startTime;
 
 	protected function _construct()
@@ -18,7 +32,8 @@ abstract class Springbot_Services_Abstract extends Varien_Object
         $val = parent::getData($key);
 
 		if(!(isset($val) || is_array($val))) {
-			throw new Exception($this->_humanize($key) . ' required for harvest!');
+			//throw new Exception($this->_humanize($key) . ' required for harvest!');
+			return null;
 		} else {
 			return $val;
 		}
@@ -39,13 +54,21 @@ abstract class Springbot_Services_Abstract extends Varien_Object
 		if($storeId = parent::getData('store_id')) {
 			return $storeId;
 		} else {
-			return 0;
+			return Mage::app()->getStore()->getStoreId();
 		}
+		return 0;
+	}
+
+	public function getSpringbotStoreId()
+	{
+		return Mage::helper('combine/harvest')
+			->getSpringbotStoreId($this->getStoreId());
 	}
 
 	public function getStartId()
 	{
-		return parent::getData('start_id');
+		$value = parent::getData('start_id');
+		return isset($value) ? $value : 0;
 	}
 
 	public function getStopId()
@@ -78,29 +101,14 @@ abstract class Springbot_Services_Abstract extends Varien_Object
 		return isset($this->_data['force']) && $this->_data['force'] === true;
 	}
 
-	public function getProcessedCount()
+	public function getSegmentMin($harvester)
 	{
-		return $this->getHarvester()->getProcessedCount();
+		return $harvester->getSegmentMin();
 	}
 
-	public function getHarvesterName()
+	public function getSegmentMax($harvester)
 	{
-		return $this->getHarvester()->getHarvesterName();
-	}
-
-	public function getHarvester()
-	{
-		return $this->_harvester;
-	}
-
-	public function getSegmentMin()
-	{
-		return $this->getHarvester()->getSegmentMin();
-	}
-
-	public function getSegmentMax()
-	{
-		return $this->getHarvester()->getSegmentMax();
+		return $harvester->getSegmentMax();
 	}
 
 	public function getType()

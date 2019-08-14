@@ -9,7 +9,7 @@ abstract class Springbot_Combine_Model_Resource_Abstract extends Mage_Core_Model
 			$bind = $this->_prepareDataForSave($object);
 			$this->_insertIgnore($table, $bind);
 		} catch (Exception $e) {
-			Mage::logException($e);
+			Springbot_Log::error($e);
 		}
 	}
 

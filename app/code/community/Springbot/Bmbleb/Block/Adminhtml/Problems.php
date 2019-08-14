@@ -13,6 +13,6 @@ class Springbot_Bmbleb_Block_Adminhtml_Problems extends Mage_Adminhtml_Block_Tem
 	 */
 	public function getSolutions()
 	{
-		return Mage::helper('bmbleb/PluginStatus')->getAllPluginProblems();
+		return Mage::helper('bmbleb/PluginStatus')->getPluginProblems();
 	}
 }

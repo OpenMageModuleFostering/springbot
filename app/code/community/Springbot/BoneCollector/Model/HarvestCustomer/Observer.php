@@ -12,7 +12,7 @@ class Springbot_BoneCollector_Model_HarvestCustomer_Observer extends Springbot_B
 
 			if ($this->_entityChanged($this->_customer)) {
 				$customerId = $this->_customer->getId();
-				Springbot_Boss::scheduleJob('post:customer', array('i' => $customerId), Springbot_Services_Priority::LISTENER, 'listener');
+				Springbot_Boss::scheduleJob('post:customer', array('i' => $customerId), Springbot_Services::LISTENER, 'listener');
 			}
 		} catch (Exception $e) {
 			Springbot_Log::error($e);
@@ -29,7 +29,6 @@ class Springbot_BoneCollector_Model_HarvestCustomer_Observer extends Springbot_B
 				'start_id' => $customer->getId(),
 				'delete' => true,
 			))->run();
-
 		} catch (Exception $e) {
 			Springbot_Log::error($e);
 		}

@@ -2,7 +2,6 @@
 
 class Springbot_Combine_Helper_Redirect extends Mage_Core_Helper_Abstract
 {
-	const COOKIE_NAME = 'springbot_redirect_queue';
 
 	public function insertRedirectIds($params, $ids = null)
 	{
@@ -40,7 +39,7 @@ class Springbot_Combine_Helper_Redirect extends Mage_Core_Helper_Abstract
 	public function checkTable($table)
 	{
 		if(!Mage::getSingleton('core/resource')->getConnection('core_read')->showTableStatus($table)) {
-			Mage::logException(new Exception("{$table} table does not exist. Rerunning Springbot update 1.0.0.70->1.2.0.0."));
+			Springbot_Log::error("{$table} table does not exist. Rerunning Springbot update 1.0.0.70->1.2.0.0.");
 			$setup = new Springbot_Combine_Model_Resource_Setup('combine_setup');
 			$setup->reinstallSetupScript('1.0.0.70', '1.2.0.0');
 			return true;
@@ -113,7 +112,7 @@ class Springbot_Combine_Helper_Redirect extends Mage_Core_Helper_Abstract
 
 	public function getRawCookie()
 	{
-		return Mage::getModel('core/cookie')->get(self::COOKIE_NAME);
+		return Mage::getModel('core/cookie')->get(Springbot_Boss::COOKIE_NAME);
 	}
 
 	public function hasRedirectId()

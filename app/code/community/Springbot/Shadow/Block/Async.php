@@ -1,6 +1,6 @@
 <?php
 
-class Springbot_Shadow_Block_Js_Boot extends Mage_Core_Block_Template
+class Springbot_Shadow_Block_Async extends Mage_Core_Block_Template
 {
 	public function getSpringbotStoreId()
 	{

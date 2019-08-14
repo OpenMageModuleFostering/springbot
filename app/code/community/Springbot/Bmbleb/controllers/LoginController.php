@@ -45,9 +45,9 @@ class Springbot_Bmbleb_LoginController extends Mage_Adminhtml_Controller_Action
 			$client->setRawData('{"user_id":"'.$email.'", "password":"'.$pass.'"}');
 			$response 	= $client->request('POST');
 			$result		= json_decode($response->getBody(),true);
-		} catch (Exception $e) {
-			Mage::log('Remote Springbot service unavailable!');
-			Mage::logException($e);
+		}
+		catch (Exception $e) {
+			Springbot_Log::error($e);
 			Mage::getSingleton('adminhtml/session')->addError('Service unavailable from ' . $url . ' please contact support@springbot.com.');
 			$this->_redirect('bmbleb/adminhtml_index/auth');
 			return;
@@ -56,12 +56,13 @@ class Springbot_Bmbleb_LoginController extends Mage_Adminhtml_Controller_Action
 		if ($result['status']=='error') {
 			Mage::getSingleton('adminhtml/session')->addError($result['message'].' or service unavailable from '.$url);
 			$this->_redirect('bmbleb/adminhtml_index/auth');
-		} else {
+		}
+		else {
 			if ($result['token'] == '') {
 				Mage::getSingleton('adminhtml/session')->addError('Login denied by Springbot');
 				$this->_redirect('bmbleb/adminhtml_index/auth');
-			} else {
-				Mage::log('Email->' . $email.' Token->' . $result['token']);
+			}
+			else {
 				$bmblebAccount->setSavedAccountInformation($email,$pass,$result['token']);
 				$this->_redirect('bmbleb/adminhtml_index/index');
 			}

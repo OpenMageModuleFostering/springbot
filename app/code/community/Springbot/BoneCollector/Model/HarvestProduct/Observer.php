@@ -1,17 +1,5 @@
 <?php
-/**
- * BoneCollector Event Listener (Product Harvest)
- *
- * @version		v1.0.0 - 12/28/2012
- *
- * @category    Magento Integrations
- * @package     springbot
- * @author 		William Seitz
- * @division	SpringBot Integration Team
- * @support		magentosupport@springbot.com
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *
- */
+
 class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_BoneCollector_Model_HarvestAbstract
 {
 	protected $_product;
@@ -32,6 +20,7 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 		'price',
 		'special_price',
 		'image_label',
+		'name',
 	);
 
 	public function onProductSaveAfter($observer)
@@ -41,11 +30,11 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 
 			if ($this->_entityChanged($this->_product)) {
 				$this->_initObserver($observer);
-				Springbot_Boss::scheduleJob('post:product', array('i' => $this->_product->getId()), Springbot_Services_Priority::LISTENER, 'listener');
+				Springbot_Boss::scheduleJob('post:product', array('i' => $this->_product->getId()), Springbot_Services::LISTENER, 'listener');
 			}
 
 		} catch (Exception $e) {
-			Mage::logException($e);
+			Springbot_Log::error($e);
 		}
 	}
 
@@ -65,7 +54,7 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 			}
 			Mage::helper('combine/harvest')->deleteRemote($post, 'products');
 		} catch (Exception $e) {
-			Mage::logException($e);
+			Springbot_Log::error($e);
 		}
 	}
 

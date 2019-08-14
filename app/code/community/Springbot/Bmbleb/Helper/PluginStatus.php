@@ -4,51 +4,18 @@ class Springbot_Bmbleb_Helper_PluginStatus extends Mage_Core_Helper_Abstract
 {
 	const REPORT_PROBLEMS_INTERVAL_SECONDS = 604800; // Seven days in seconds
 	const TOO_MANY_HOURS                   = 3; // Minimum number of hours since harvest to display warning
-	const STORE_TIMESTAMP_GLOB             = 'sb-cache-healthcheck-*.dat'; // Globbing string to find all
-
-	/**
-	 * Run all checks for fatal problems
-	 *
-	 * Returns any issues that would prevent a harvest that can be checked on each plugin page load, once a fatal
-	 * plugin problem is detected the user is redirected to the problems page where they are presented with a more
-	 * detailed list of problems and instructed to either login again or contact support.
-	 */
-	public function getFatalPluginProblems()
-	{
-		return $this->_getPluginProblems(true, false, false);
-	}
-
-	/**
-	 * Returns a list of potential problems that should be brought to the user's attention for the magento global
-	 * notifications.
-	 */
-	public function getGlobalPluginProblems()
-	{
-		return $this->_getPluginProblems(true, true, false);
-	}
-
-	/**
-	 * Returns all problems (used for the problems page) so that they can see a detailed list of problems
-	 * and possible fixes.
-	 */
-	public function getAllPluginProblems()
-	{
-		return $this->_getPluginProblems(true, true, true);
-	}
-
 
 	/**
 	 * Check to see if its been a long time since the last checkin
 	 */
 	public function tooLongSinceCheckin()
 	{
-		$fileNameGlob = $this->_getFilenameGlob();
 		$currentTime = time();
-		$matches = glob($fileNameGlob);
 		$secondsSinceLastCheckin = null;
 		$mostRecentCheckin = null;
-		foreach ($matches as $match) {
-			$checkinTimestap = file_get_contents($match);
+
+		foreach (Mage::app()->getStores() as $store) {
+			$checkinTimestap = Springbot_Util_Timer::lastRun('healthcheck', $store->getId());
 			$secondsSinceLastCheckin = $currentTime - $checkinTimestap;
 			if (!$mostRecentCheckin || ($secondsSinceLastCheckin < $mostRecentCheckin)) {
 				$mostRecentCheckin = $secondsSinceLastCheckin;
@@ -71,84 +38,57 @@ class Springbot_Bmbleb_Helper_PluginStatus extends Mage_Core_Helper_Abstract
 	 * Returns a detailed list of all issues (used on the problems page) so that the user may give the support team
 	 * more information for troubleshooting what the actual issue may be.
 	 */
-	private function _getPluginProblems($fatalProblems, $globalProblems, $possibleProblems)
+	public function getPluginProblems()
 	{
 		$problems = array();
 
 
-		// Fatal problems are problems that will cause the Springbot section to redirect to the problems page
-		if ($fatalProblems) {
-
-			if ($this->_emailPasswordSet() && !$this->_harvestInFlight()) {
-				if (($missingGuids = $this->_getMissingStoreGuids())) {
-					$problems[] = array(
-						'problem' => 'Missing GUIDs for the following stores: ' . $missingGuids,
-						'solution' => 'This problem can usually be fixed by re-logging into your Springbot account. '
-					);
-				}
-				if ($this->_tokenIsInvalid()) {
-					$problems[] = array(
-						'problem' => 'Security token is invalid',
-						'solution' => 'This problem can usually be fixed by re-logging into your Springbot account. '
-					);
-				}
-			}
-
-			if (!$this->_logDirIsWritable()) {
+		if ($this->_emailPasswordSet() && !$this->_harvestInFlight()) {
+			if (($missingGuids = $this->_getMissingStoreGuids())) {
 				$problems[] = array(
-					'problem' => 'Magento log directory is not writable',
-					'solution' => 'This server configuration problem often occurs when the owner of the directory "var/log" in your '
-						. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
-						. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/log". '
+					'problem' => 'Missing GUIDs for the following stores: ' . $missingGuids,
+					'solution' => 'This problem can usually be fixed by re-logging into your Springbot account. '
 				);
 			}
-			if (!$this->_tmpDirIsWritable()) {
+			if ($this->_tokenIsInvalid()) {
 				$problems[] = array(
-					'problem' => 'Magento tmp directory is not writable',
-					'solution' => 'This server configuration problem often occurs when the owner of the directory "var/tmp" in your '
-						. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
-						. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/tmp". '
+					'problem' => 'Security token is invalid',
+					'solution' => 'This problem can usually be fixed by re-logging into your Springbot account. '
 				);
 			}
-			if (!$this->_logDirIsReadable()) {
-				$problems[] = array(
-					'problem' => 'Magento log directory is not readable',
-					'solution' => 'This server configuration problem often occurs when the owner of the directory "var/log" in your '
-						. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
-						. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/log". '
-				);
-			}
-			if (!$this->_tmpDirIsReadable()) {
-				$problems[] = array(
-					'problem' => 'Magento tmp directory is not readable',
-					'solution' => 'This server configuration problem often occurs when the owner of the directory "var/tmp" in your '
-						. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
-						. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/tmp". '
-				);
-			}
-			if ($secondsSinceHarvest = $this->tooLongSinceCheckin()) {
-				$hoursSinceHarvest = round($secondsSinceHarvest / 60 / 60);
-				$problems[] = array(
-					'problem' => 'It\'s been ' . $hoursSinceHarvest . ' hours since the Springbot plugin last checked in',
-					'solution' => 'This problem occurs when the Springbot plugin has gone too long since it last '
-						. 'communicated with the Springbot server. This issue can often be resolved by simply '
-						. 're-logging in to your Springbot dashboard. '
-				);
-			}
-			if (!$this->_correctPhpPath()) {
-				$problems[] = array(
-					'problem' => 'Incorrect PHP executable path',
-					'solution' => 'This usually means that the default PHP path for your server cannot run in CLI mode. '
-						. 'To fix this issue locate the full path of the PHP executable that you would use to run cron '
-						. 'jobs and paste it into the "PHP Executable" setting in your Springbot configuration. '
-				);
-			}
-
 		}
 
-		// Global problems are problems that will cause a top notification on the Magento dashboard only
-		if ($globalProblems) {
-
+		if (!$this->_logDirIsWritable()) {
+			$problems[] = array(
+				'problem' => 'Magento log directory is not writable',
+				'solution' => 'This server configuration problem often occurs when the owner of the directory "var/log" in your '
+				. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
+				. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/log". '
+			);
+		}
+		if (!$this->_tmpDirIsWritable()) {
+			$problems[] = array(
+				'problem' => 'Magento tmp directory is not writable',
+				'solution' => 'This server configuration problem often occurs when the owner of the directory "var/tmp" in your '
+				. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
+				. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/tmp". '
+			);
+		}
+		if (!$this->_logDirIsReadable()) {
+			$problems[] = array(
+				'problem' => 'Magento log directory is not readable',
+				'solution' => 'This server configuration problem often occurs when the owner of the directory "var/log" in your '
+				. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
+				. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/log". '
+			);
+		}
+		if (!$this->_tmpDirIsReadable()) {
+			$problems[] = array(
+				'problem' => 'Magento tmp directory is not readable',
+				'solution' => 'This server configuration problem often occurs when the owner of the directory "var/tmp" in your '
+				. 'Magento root folder is different than the user your webserver runs as. To fix this issue '
+				. 'navigate to your Magento directory and run the command "chown &lt;your webserver user&gt; var/tmp". '
+			);
 		}
 
 		// Report any plugin problems to the Springbot API once a week or for the very first time
@@ -162,17 +102,6 @@ class Springbot_Bmbleb_Helper_PluginStatus extends Mage_Core_Helper_Abstract
 			}
 		}
 
-		// Possible problems include issues which might not necessarily cause a problem, but may offer insight into other problems
-		if ($possibleProblems) {
-			if (!$this->_mediaDirIsWritable()) {
-				$problems[] = array(
-					'problem' => 'The media directory is not writable',
-					'solution' => 'The Magento media directory is not writable. While this should not affect the Springbot plugin '
-						. 'it may be evidence of further permission and configuration issues. Ideally the owner of the media '
-						. 'directory should be the same user that your webserver software runs as.'
-				);
-			}
-		}
 
 		return $problems;
 	}
@@ -273,14 +202,6 @@ class Springbot_Bmbleb_Helper_PluginStatus extends Mage_Core_Helper_Abstract
 	}
 
 	/**
-	 * Check to see if Magento log directory is writable
-	 */
-	private function _mediaDirIsWritable()
-	{
-		return is_writable(Mage::getBaseDir('media'));
-	}
-
-	/**
 	 * Take array of problems and post it to the Springbot API
 	 */
 	private function _postProblemsToApi($problems)
@@ -315,25 +236,5 @@ class Springbot_Bmbleb_Helper_PluginStatus extends Mage_Core_Helper_Abstract
 			}
 		}
 		return $springbotStoreIds;
-	}
-
-	private function _getFilenameGlob()
-	{
-		return Mage::getBaseDir('tmp') . DS . self::STORE_TIMESTAMP_GLOB;
-	}
-
-	private function _correctPhpPath()
-	{
-		$phpPath = Mage::helper('combine/harvest')->getPhpExec();
-		ob_start();
-		try {
-			Springbot_boss::spawn("{$phpPath} -r \"echo '<!-- PHP Test -->';\"", $output);
-		}
-		catch (Exception $e) {
-			// We do not know if the PHP executable path is correct or not since we cannot run spawn anyway
-			return true;
-		}
-		$result = ob_get_clean();
-		return trim($result) == '<!-- PHP Test -->';
 	}
 }

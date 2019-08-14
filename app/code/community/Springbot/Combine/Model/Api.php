@@ -14,7 +14,7 @@ class Springbot_Combine_Model_Api extends Varien_Object
 	protected $_retries = 0;
 	protected $_requestStart;
 
-	public function wrap($model, array $data)
+	public function wrap($model, $data)
 	{
 		$transport = new stdClass();
 		$transport->$model = $data;
