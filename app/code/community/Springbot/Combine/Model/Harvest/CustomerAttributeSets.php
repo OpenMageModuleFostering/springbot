@@ -29,6 +29,24 @@ class Springbot_Combine_Model_Harvest_CustomerAttributeSets extends Springbot_Co
 		return 'attribute_set_id';
 	}
 
+	/**
+	 * Parse caller for dependent parser method
+	 *
+	 * @param Mage_Core_Model_Abstract $model
+	 * @return Zend_Json_Expr
+	 */
+	public function parse($model)
+	{
+		$parser = Mage::getModel($this->getParserModel(), $model);
+		$parser->setMageStoreId($this->getStoreId());
+		$parser->setStoreId($this->getStoreId());
+		$parser->parse();
+
+		if ($this->getDelete()) {
+			$parser->setIsDeleted(true);
+		}
+		return $parser->getData();
+	}
 
 	public function loadMageModel($id)
 	{

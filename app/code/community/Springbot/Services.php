@@ -111,11 +111,6 @@ abstract class Springbot_Services extends Varien_Object
 		return $harvester->getSegmentMax();
 	}
 
-	public function getType()
-	{
-		return ucwords($this->_type);
-	}
-
 	public function getRuntime()
 	{
 		return number_format(microtime(true) - $this->_startTime, 3, '.', '');

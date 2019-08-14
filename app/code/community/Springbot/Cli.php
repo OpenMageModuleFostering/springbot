@@ -22,7 +22,7 @@ class Springbot_Cli
 	 */
 	public static function async($method, $args = array())
 	{
-		if(Springbot_Boss::isCron()) {
+		if (Springbot_Boss::isCron() || Springbot_Boss::isPrattler()) {
 			Springbot_Boss::scheduleJob($method, $args, 1);
 		} else {
 			self::internalCallback($method, $args, true);
@@ -108,6 +108,11 @@ class Springbot_Cli
 	{
 		Mage::helper('combine/harvest')->truncateEngineLogs();
 		self::async('cmd:harvest');
+	}
+
+	public static function launchHarvestInline() {
+		$harvest = new Springbot_Services_Cmd_Harvest();
+		$harvest->run();
 	}
 
 	public static function runHealthcheck($storeId = null, $force = false)

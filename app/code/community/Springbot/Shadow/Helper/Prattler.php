@@ -9,23 +9,22 @@ class Springbot_Shadow_Helper_Prattler extends Mage_Core_Helper_Abstract
 		return sha1($token);
 	}
 
-	public function getPrattlerJsonResponse()
+	public function getPrattlerResponse()
 	{
 		$jobs = Mage::getModel('combine/cron_queue')->getCollection();
 		$events = Mage::getModel('combine/action')->getCollection();
-		$response = array(
+		return array(
 			'success' => true,
 			'jobs' => $jobs->getActiveCount(),
 			'events' => $events->getSize()
 		);
-		return json_encode($response);
 	}
 
-	public function getExceptionJsonResponse($e)
+	public function getExceptionResponse($e)
 	{
-		return json_encode(array(
+		return array(
 			'success' => false,
 			'message' => $e->getMessage(),
-		));
+		);
 	}
 }

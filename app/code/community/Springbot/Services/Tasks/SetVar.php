@@ -16,5 +16,6 @@ class Springbot_Services_Tasks_SetVar extends Springbot_Services
 		}
 
 		Mage::getConfig()->cleanCache();
+		return true;
 	}
 }

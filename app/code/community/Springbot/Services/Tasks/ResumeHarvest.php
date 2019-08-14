@@ -7,5 +7,6 @@ class Springbot_Services_Tasks_ResumeHarvest extends Springbot_Services
 		Mage::getConfig()->cleanCache();
 		Mage::getConfig()->reinit();
 		Springbot_Cli::resumeHarvest();
+		return true;
 	}
 }

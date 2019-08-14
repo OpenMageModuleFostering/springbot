@@ -9,8 +9,10 @@ class Springbot_Services_Tasks_PostItem extends Springbot_Services
 			$instance = new $classname();
 			$instance->setEntityId($this->getEntityId());
 			$instance->run();
+			return true;
 		} else {
 			throw new Exception("Type not supplied for " . __CLASS__);
+			return false;
 		}
 	}
 }

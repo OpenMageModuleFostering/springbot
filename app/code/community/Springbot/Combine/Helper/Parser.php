@@ -156,11 +156,12 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 		$resource = $product->getResource();
 		if (is_object($resource)) {
 			$attribute = $resource->getAttribute($attributeCode);
-			$sourceModel = Mage::getModel($attribute->getSourceModel());
-			if (is_object($attribute) && $sourceModel) {
-				$source = $attribute->getSource();
-				if (is_object($source)) {
-					return $source->getOptionText($product->getAttributeText($attributeCode));
+			if (is_object($attribute)) {
+				if(Mage::getModel($attribute->getSourceModel())) {
+					$source = $attribute->getSource();
+					if (is_object($source)) {
+						return $source->getOptionText($product->getAttributeText($attributeCode));
+					}
 				}
 			}
 		}

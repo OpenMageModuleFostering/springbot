@@ -15,5 +15,6 @@ class Springbot_Services_Tasks_LaunchPartialHarvest extends Springbot_Services
 			'default',
 			$this->getStoreId()
 		);
+		return true;
 	}
 }

@@ -100,7 +100,7 @@ class Springbot_Boss
 
 	public static function startWorkManager()
 	{
-		if(self::active() && !self::isCron()) {
+		if(self::active() && !self::isCron() && !self::isPrattler()) {
 			$status = Mage::getModel('combine/cron_manager_status');
 			if(
 				!$status->isBlocked() &&
@@ -124,7 +124,26 @@ class Springbot_Boss
 
 	public static function isCron()
 	{
-		return Mage::getStoreConfig('springbot/cron/enabled');
+		if (Mage::getStoreConfig('springbot/advanced/harvester_type') == "cron") {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	public static function isPrattler()
+	{
+		if (Mage::getStoreConfig('springbot/advanced/harvester_type') == "prattler") {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static function harvesterType()
+	{
+		return Mage::getStoreConfig('springbot/advanced/harvester_type');
 	}
 
 	public static function storeIdsExist()

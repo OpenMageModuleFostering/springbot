@@ -15,16 +15,18 @@ class Springbot_Services_Tasks_DeliverEventLog extends Springbot_Services
 				$eventItems[] = $event->toAction();
 			}
 			if ($eventItems) {
-				$result = Mage::getModel('combine/api')
-					->call($method, json_encode($eventItems));
+				$result = Mage::getModel('combine/api')->call($method, json_encode($eventItems));
 			}
 			$this->_removeEvents();
+			$successful = true;
 		} catch (Exception $e) {
 			// We can capture this here and keep if from bubbling up.
 			// This api call will fail and get recreated on the next check in
 			Springbot_Log::error($e);
+			$successful = false;
 		}
 		$this->_releaseLocks();
+		return $successful;
 	}
 
 	private function _removeEvents()

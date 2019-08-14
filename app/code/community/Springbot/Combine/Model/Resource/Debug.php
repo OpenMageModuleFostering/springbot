@@ -59,7 +59,7 @@ class Springbot_Combine_Model_Resource_Debug extends Springbot_Combine_Model_Res
 	{
 		$readConnection = Mage::getSingleton('core/resource')->getConnection('core_read');
 		$quotesTableName = Mage::getSingleton('core/resource')->getTableName('sales_flat_order');
-		$query = "SELECT COUNT(*) AS `count`, `store_id` FROM (SELECT DISTINCT (customer_email), `store_id` FROM `sales_flat_order` GROUP BY store_id, customer_email) `customers` GROUP BY `store_id`";
+		$query = "SELECT COUNT(*) AS `count`, `store_id` FROM (SELECT DISTINCT (customer_email), `store_id` FROM `{$quotesTableName}` GROUP BY store_id, customer_email) `customers` GROUP BY `store_id`";
 		return $readConnection->fetchAll($query);
 	}
 

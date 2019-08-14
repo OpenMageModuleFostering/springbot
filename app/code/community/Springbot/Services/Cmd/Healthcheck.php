@@ -73,15 +73,8 @@ class Springbot_Services_Cmd_Healthcheck extends Springbot_Services
 
 	private function _makeTaskInstance($cmd)
 	{
-		$taskname = $this->_snakeToCamel($cmd['command']);
-		$classname = "Springbot_Services_Tasks_{$taskname}";
-
-		Springbot_Log::debug("Init $classname");
-
-		$task = new $classname();
-		$task->setData($this->_getParams($cmd));
-
-		return $task;
+		$taskname = $cmd['command'];
+		return Springbot_Services_Tasks::makeTask($taskname, $this->_getParams($cmd));
 	}
 
 	private function _getParams($cmd)
@@ -93,12 +86,5 @@ class Springbot_Services_Cmd_Healthcheck extends Springbot_Services
 		}
 	}
 
-	private function _snakeToCamel($string)
-	{
-		$toReturn = '';
-		foreach(explode('_', $string) as $word) {
-			$toReturn .= ucfirst($word);
-		}
-		return $toReturn;
-	}
+
 }

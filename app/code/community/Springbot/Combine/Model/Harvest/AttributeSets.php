@@ -41,6 +41,8 @@ class Springbot_Combine_Model_Harvest_AttributeSets extends Springbot_Combine_Mo
 		$parser = Mage::getModel($this->getParserModel(), $model);
 		$parser->setMageStoreId($this->getStoreId());
 		$parser->setStoreId($this->getStoreId());
+		$parser->parse();
+
 		if ($this->getDelete()) {
 			$parser->setIsDeleted(true);
 		}

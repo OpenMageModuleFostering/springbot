@@ -5,6 +5,15 @@ abstract class Springbot_Combine_Model_Parser extends Varien_Object
 	protected $_parsed = false;
 	protected $_attrProtected = array();
 
+	/*
+	 * Public accessor for parse method
+	 */
+	public function parse()
+	{
+		$this->_parse();
+		return $this;
+	}
+
 	/**
 	 * Redeclaration of Varien_Object::toJson
 	 *

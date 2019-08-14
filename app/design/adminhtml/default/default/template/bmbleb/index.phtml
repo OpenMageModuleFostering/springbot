@@ -4,7 +4,7 @@
 		<img align=left  src="<?php echo $this->getSkinUrl('bmbleb/images/plugin_dashboard_syncing.jpg'); ?>" alt="springbot logo" />&nbsp;</a>
 	<?php
 		try {
-			Springbot_Cli::launchHarvest();
+			Springbot_Cli::launchHarvestInline();
 		}
 		catch (Exception $e) {
 			Springbot_Log::error($e);

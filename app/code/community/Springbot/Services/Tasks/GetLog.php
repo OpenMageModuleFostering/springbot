@@ -25,5 +25,6 @@ class Springbot_Services_Tasks_GetLog extends Springbot_Services
 				Springbot_Log::harvest('['.__METHOD__.'] delivery failed ->'.$result['status']);
 			}
 		}
+		return true;
 	}
 }

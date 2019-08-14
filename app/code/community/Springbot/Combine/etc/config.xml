@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Springbot_Combine>
-			<version>1.4.0.9</version>
+			<version>1.4.1.1</version>
 		</Springbot_Combine>
 	</modules>
 	<global>
@@ -86,6 +86,8 @@
 				<filesize_limit>10000000</filesize_limit>
 			</debug>
 			<advanced>
+				<harvester_type>cron</harvester_type>
+				<max_jobs>10</max_jobs>
 				<nice>0</nice>
 				<nohup>0</nohup>
 				<worker_count>2</worker_count>
@@ -101,7 +103,7 @@
 			</cart_restore>
 			<cron>
 				<enabled>0</enabled>
-				<max_jobs>1</max_jobs>
+				<max_jobs>10</max_jobs>
 			</cron>
 		</springbot>
 	</default>
