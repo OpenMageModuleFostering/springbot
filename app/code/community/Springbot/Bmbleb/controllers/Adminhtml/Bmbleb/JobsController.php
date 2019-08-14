@@ -1,5 +1,5 @@
 <?php
-class Springbot_Bmbleb_Adminhtml_JobsController extends Mage_Adminhtml_Controller_Action
+class Springbot_Bmbleb_Adminhtml_Bmbleb_JobsController extends Mage_Adminhtml_Controller_Action
 {
 	public function indexAction()
 	{
@@ -74,4 +74,10 @@ class Springbot_Bmbleb_Adminhtml_JobsController extends Mage_Adminhtml_Controlle
 	{
 		return Mage::getModel('combine/cron_queue')->load($id);
 	}
+
+	protected function _isAllowed()
+	{
+		return Mage::getSingleton('admin/session')->isAllowed('springbot_bmbleb/dashboard');
+	}
+
 }

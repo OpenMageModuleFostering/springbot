@@ -4,10 +4,10 @@
 </div>
 
 <ul class="tabs">
-	<li class="ico1"><a href="<?php echo $this->getUrl('bmbleb/adminhtml_index/status'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_index')) { echo ' active'; } ?>"><span>Dashboard</span></a></li>
+	<li class="ico1"><a href="<?php echo $this->getUrl('adminhtml/bmbleb_index/status'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_index')) { echo ' active'; } ?>"><span>Dashboard</span></a></li>
 	<?php if($this->useExtendedAdmin()): ?>
-		<li class="ico2"><a href="<?php echo $this->getUrl('bmbleb/adminhtml_jobs/index'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_jobs')) { echo ' active'; } ?>"><span>Jobs</span></a></li>
-		<li class="ico3"><a href="<?php echo $this->getUrl('bmbleb/adminhtml_logs/index'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_logs')) { echo ' active'; } ?>"><span>Logs</span></a></li>
+		<li class="ico2"><a href="<?php echo $this->getUrl('adminhtml/bmbleb_jobs/index'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_jobs')) { echo ' active'; } ?>"><span>Jobs</span></a></li>
+		<li class="ico3"><a href="<?php echo $this->getUrl('adminhtml/bmbleb_logs/index'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_logs')) { echo ' active'; } ?>"><span>Logs</span></a></li>
 	<?php endif ?>
-	<li class="ico7"><a href="<?php echo $this->getUrl('bmbleb/adminhtml_help/index'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_help')) { echo ' active'; } ?>"><span>Help</span></a></li>
+	<li class="ico7"><a href="<?php echo $this->getUrl('adminhtml/bmbleb_help/index'); ?>" class="tab-item-link<?php if ($this->isActive('adminhtml_help')) { echo ' active'; } ?>"><span>Help</span></a></li>
 </ul>

@@ -1,5 +1,5 @@
 <?php
-class Springbot_Bmbleb_Adminhtml_LogsController extends Mage_Adminhtml_Controller_Action
+class Springbot_Bmbleb_Adminhtml_Bmbleb_LogsController extends Mage_Adminhtml_Controller_Action
 {
 
 	public function indexAction()
@@ -25,6 +25,11 @@ class Springbot_Bmbleb_Adminhtml_LogsController extends Mage_Adminhtml_Controlle
 		$this->getResponse()->sendHeaders();
 		readfile($logPath);
 		exit;
+	}
+
+	protected function _isAllowed()
+	{
+		return Mage::getSingleton('admin/session')->isAllowed('springbot_bmbleb/dashboard');
 	}
 
 }

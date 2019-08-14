@@ -38,7 +38,7 @@ abstract class Springbot_Combine_Model_Harvest
 	}
 
 	/**
-	 * Iterate through all entities inn the collection and call the step() method
+	 * Iterate through all entities in the collection and call the step() method
 	 * which will post the JSON entities to the API.
 	 *
 	 * @return Springbot_Combine_Model_Harvest
@@ -107,6 +107,7 @@ abstract class Springbot_Combine_Model_Harvest
 	{
 		if (count($this->_segmentQueue) >= $this->getSegmentSize()) {
 			$this->_total += $this->getSegmentSize();
+			echo "Posting segment\n";
 			$this->postSegment();
 		}
 
@@ -138,6 +139,7 @@ abstract class Springbot_Combine_Model_Harvest
 		if($this->_delete) {
 			$parser->setIsDeleted(true);
 		}
+
 		return $parser->getData();
 	}
 

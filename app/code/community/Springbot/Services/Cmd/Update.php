@@ -47,7 +47,7 @@ class Springbot_Services_Cmd_Update extends Springbot_Services
 
 				Springbot_Log::info("Install was successful. Clearing cache.");
 
-				Mage::app()->cleanCache();
+				Mage::getConfig()->cleanCache();
 			} catch (Exception $e) {
 				Springbot_Log::error($e);
 			}

@@ -1,5 +1,5 @@
 <?php
-class Springbot_Bmbleb_Adminhtml_SettingsController extends Mage_Adminhtml_Controller_Action
+class Springbot_Bmbleb_Adminhtml_Bmbleb_SettingsController extends Mage_Adminhtml_Controller_Action
 {
 	public function indexAction()
 	{
@@ -16,11 +16,11 @@ class Springbot_Bmbleb_Adminhtml_SettingsController extends Mage_Adminhtml_Contr
 		if ($auth) {
 			$bmbAcct = Mage::helper('bmbleb/Account');
 			$bmbAcct->setIsLoggedIn(true);
-			$this->_redirect('bmbleb/adminhtml_index/status');
+			$this->_redirect('adminhtml/bmbleb_index/status');
 			return;
 		}
 
-		$this->_redirect('bmbleb/adminhtml_index/auth');
+		$this->_redirect('adminhtml/bmbleb_index/auth');
 		return;
 	}
 
@@ -59,6 +59,11 @@ class Springbot_Bmbleb_Adminhtml_SettingsController extends Mage_Adminhtml_Contr
 		}
 		$this->_redirect('*/*/index', array());
 		return;
+	}
+
+	protected function _isAllowed()
+	{
+		return Mage::getSingleton('admin/session')->isAllowed('springbot_bmbleb/dashboard');
 	}
 
 }

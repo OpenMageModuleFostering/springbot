@@ -79,6 +79,52 @@
 					</springbot_bonecollector_subscriberdelete_observer>
 				</observers>
 			</newsletter_subscriber_delete_before>
+
+
+			<!-- Inventory update listeners -->
+			<cataloginventory_stock_item_save_commit_after>
+				<observers>
+					<springbot_bonecollector_stockitemsavecommit_observer>
+						<class>Springbot_BoneCollector_Model_HarvestInventoryItem_Observer</class>
+						<method>onCatalogInventorySave</method>
+					</springbot_bonecollector_stockitemsavecommit_observer>
+				</observers>
+			</cataloginventory_stock_item_save_commit_after>
+			<sales_model_service_quote_submit_before>
+				<observers>
+					<springbot_bonecollector_quoteseubmit_observer>
+						<class>Springbot_BoneCollector_Model_HarvestInventoryItem_Observer</class>
+						<method>onQuoteSubmit</method>
+					</springbot_bonecollector_quoteseubmit_observer>
+				</observers>
+			</sales_model_service_quote_submit_before>
+			<sales_model_service_quote_submit_failure>
+				<observers>
+					<springbot_bonecollector_quotesubmitfailure>
+						<class>Springbot_BoneCollector_Model_HarvestInventoryItem_Observer</class>
+						<method>onQuoteSubmit</method>
+					</springbot_bonecollector_quotesubmitfailure>
+				</observers>
+			</sales_model_service_quote_submit_failure>
+			<sales_order_item_cancel>
+				<observers>
+					<springbot_bonecollector_stockupdate>
+						<class>Springbot_BoneCollector_Model_HarvestInventoryItem_Observer</class>
+						<method>onCancelOrderItem</method>
+					</springbot_bonecollector_stockupdate>
+				</observers>
+			</sales_order_item_cancel>
+			<sales_order_creditmemo_save_after>
+				<observers>
+					<springbot_bonecollector_stockupdate>
+						<class>Springbot_BoneCollector_Model_HarvestInventoryItem_Observer</class>
+						<method>onCreditmemoSave</method>
+					</springbot_bonecollector_stockupdate>
+				</observers>
+			</sales_order_creditmemo_save_after>
+			<!-- End inventory update listeners -->
+
+
 		</events>
 	</global>
 	<frontend>

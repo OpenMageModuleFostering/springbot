@@ -293,7 +293,7 @@ class Springbot_Combine_Helper_Harvest extends Mage_Core_Helper_Abstract
 	public function getStoreUrl($storeId)
 	{
 		$store = Mage::app()->getStore($storeId);
-		$url = $store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+		$url = $store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true);
 
 		if($store->getStoreInUrl()) {
 			$url .= $store->getCode();

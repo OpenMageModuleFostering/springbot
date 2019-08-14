@@ -41,7 +41,7 @@ class Springbot_Bmbleb_Block_Adminhtml_Bmbleb_Login_Form extends Mage_Adminhtml_
 		$form->setUseContainer(true);
 		$form->setId('login_form');
 		$form->setName('login_form');
-		$form->setAction($this->getUrl('*/login/login'));
+		$form->setAction($this->getUrl('adminhtml/bmbleb_login/login'));
 		$this->logPageVisit();
 		$this->setForm($form);
 	}

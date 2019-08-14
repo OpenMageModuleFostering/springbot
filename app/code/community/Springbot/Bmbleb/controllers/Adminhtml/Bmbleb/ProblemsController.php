@@ -1,5 +1,5 @@
 <?php
-class Springbot_Bmbleb_Adminhtml_ProblemsController extends Mage_Adminhtml_Controller_Action
+class Springbot_Bmbleb_Adminhtml_Bmbleb_ProblemsController extends Mage_Adminhtml_Controller_Action
 {
 
 	public function indexAction()
@@ -15,6 +15,11 @@ class Springbot_Bmbleb_Adminhtml_ProblemsController extends Mage_Adminhtml_Contr
 			$this->_redirect('bmbleb/adminhtml_index/status');
 		}
 
+	}
+
+	protected function _isAllowed()
+	{
+		return Mage::getSingleton('admin/session')->isAllowed('springbot_bmbleb/dashboard');
 	}
 
 }

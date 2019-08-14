@@ -1,22 +1,18 @@
 <?xml version="1.0"?>
 <layout>
-	<bmbleb_index_index>
-		<reference name="head">
-			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
-		</reference>
-	</bmbleb_index_index>
-	<bmbleb_adminhtml_index_index>
+
+	<adminhtml_bmbleb_index_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
 		<reference name="content">
-			<block type="bmbleb/adminhtml_index" name="bmbleb.index"></block>
+			<block type="bmbleb/adminhtml_index" name="bmbleb.index"/>
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_index_index>
-	<bmbleb_adminhtml_index_auth>
+	</adminhtml_bmbleb_index_index>
+	<adminhtml_bmbleb_index_auth>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
@@ -26,32 +22,32 @@
 			</block>
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_index_auth>
-	<bmbleb_adminhtml_index_status>
+	</adminhtml_bmbleb_index_auth>
+	<adminhtml_bmbleb_index_status>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
 		<reference name="content">
-			<block type="bmbleb/adminhtml_status" name="bmbleb.status"></block>
+			<block type="bmbleb/adminhtml_status" name="bmbleb.status"/>
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_index_status>
-	<bmbleb_adminhtml_connectedtospringbot>
+	</adminhtml_bmbleb_index_status>
+	<adminhtml_bmbleb_connectedtospringbot>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
 		<reference name="content">
-			<block type="bmbleb/adminhtml_status" name="bmbleb.status"></block>
+			<block type="bmbleb/adminhtml_status" name="bmbleb.status"/>
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_connectedtospringbot>
-	<bmbleb_adminhtml_help_index>
+	</adminhtml_bmbleb_connectedtospringbot>
+	<adminhtml_bmbleb_help_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
@@ -59,34 +55,34 @@
 			<block type="bmbleb/adminhtml_help" name="bmbleb.help" />
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_help_index>
-	<bmbleb_adminhtml_jobs_index>
+	</adminhtml_bmbleb_help_index>
+	<adminhtml_bmbleb_jobs_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
 		<reference name="content">
 			<block type="bmbleb/adminhtml_jobs" template="bmbleb/jobs.phtml" name="bmbleb.jobs">
-				<block type="bmbleb/adminhtml_jobs_status" name="bmbleb.jobs.status"></block>
+				<block type="bmbleb/adminhtml_jobs_status" name="bmbleb.jobs.status"/>
 			</block>
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_jobs_index>
-    <bmbleb_adminhtml_logs_index>
+	</adminhtml_bmbleb_jobs_index>
+    <adminhtml_bmbleb_logs_index>
         <reference name="head">
             <action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
         </reference>
         <reference name="content">
-            <block type="bmbleb/adminhtml_logs" name="bmbleb.logs"></block>
+            <block type="bmbleb/adminhtml_logs" name="bmbleb.logs"/>
         </reference>
         <reference name="left">
-            <block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+            <block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
         </reference>
-    </bmbleb_adminhtml_logs_index>
-	<bmbleb_adminhtml_problems_index>
+    </adminhtml_bmbleb_logs_index>
+	<adminhtml_bmbleb_problems_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
@@ -94,15 +90,15 @@
 			<block type="bmbleb/adminhtml_problems" name="bmbleb.problems" />
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_problems_index>
+	</adminhtml_bmbleb_problems_index>
 	<bmbleb_account_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
 	</bmbleb_account_index>
-	<bmbleb_adminhtml_settings_index>
+	<adminhtml_bmbleb_settings_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
 		</reference>
@@ -110,12 +106,12 @@
 			<block type="bmbleb/adminhtml_settings" name="bmbleb.settings" />
 		</reference>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
-	</bmbleb_adminhtml_settings_index>
+	</adminhtml_bmbleb_settings_index>
 	<bmbleb_logout_logout>
 		<reference name="left">
-			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"></block>
+			<block type="bmbleb/adminhtml_tabs" name="bmbleb.tabs"/>
 		</reference>
 		<reference name="content">
 			<block type="bmbleb/adminhtml_logout" name="bmbleb.logout" template="bmbleb/logout.phtml" />

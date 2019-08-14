@@ -2,18 +2,18 @@
 <config>
     <modules>
         <Springbot_Bmbleb>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </Springbot_Bmbleb>
     </modules>
     <admin>
         <routers>
-            <bmbleb>
-                <use>admin</use>
-                <args>
-                    <module>Springbot_Bmbleb</module>
-                    <frontName>bmbleb</frontName>
-                </args>
-            </bmbleb>
+            <adminhtml>
+				<args>
+					<modules>
+						<bmbleb after="Mage_Adminhtml">Springbot_Bmbleb_Adminhtml</bmbleb>
+					</modules>
+				</args>
+			</adminhtml>
         </routers>
     </admin>
     <adminhtml>
@@ -24,7 +24,7 @@
                 <children>
                     <dashboard module="bmbleb">
                         <title>Dashboard</title>
-                        <action>bmbleb/adminhtml_settings/index</action>
+                        <action>adminhtml/bmbleb_settings/index</action>
                     </dashboard>
                 </children>
             </springbot_bmbleb>

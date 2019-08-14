@@ -1,6 +1,7 @@
 <?php
-class Springbot_Bmbleb_Adminhtml_IndexController extends Mage_Adminhtml_Controller_Action
+class Springbot_Bmbleb_Adminhtml_Bmbleb_IndexController extends Mage_Adminhtml_Controller_Action
 {
+
 	protected function _init()
 	{
 		if(!Mage::helper('bmbleb/Account')->getIsAuthenticated()) {
@@ -21,11 +22,14 @@ class Springbot_Bmbleb_Adminhtml_IndexController extends Mage_Adminhtml_Controll
 		}
 	}
 
-	public function indexAction()
+	public function harvestAction()
 	{
-		$this->loadLayout();
-		$this->_setActiveMenu('springbot_bmbleb');
-		$this->renderLayout();
+		try {
+			Springbot_Cli::launchHarvestInline();
+		}
+		catch (Exception $e) {
+			Springbot_Log::error($e);
+		}
 		$this->_redirect('*/*/status');
 		return;
 	}
@@ -63,6 +67,11 @@ class Springbot_Bmbleb_Adminhtml_IndexController extends Mage_Adminhtml_Controll
 		$this->_setActiveMenu('springbot_bmbleb');
 		$this->renderLayout();
 		return;
+	}
+
+	protected function _isAllowed()
+	{
+		return Mage::getSingleton('admin/session')->isAllowed('springbot_bmbleb/dashboard');
 	}
 
 }

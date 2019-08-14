@@ -11,7 +11,7 @@ class Springbot_Bmbleb_Block_Adminhtml_Notifications extends Mage_Adminhtml_Bloc
 			if (Mage::getStoreConfig('springbot/config/show_notifications') == 1) {
 				if (Mage::helper('bmbleb/PluginStatus')->needsToLogin()) {
 					$message = 'Springbot has been installed successfully. ' .
-						'<a href="' . $this->getUrl('bmbleb/adminhtml_index/status') . '">Click here to login</a>. ' .
+						'<a href="' . $this->getUrl('adminhtml/bmbleb_index/status') . '">Click here to login</a>. ' .
 						'You can turn off Springbot notifications in ' .
 						'<a href="' . $this->getUrl('adminhtml/system_config/edit/section/springbot') . '">Springbot configuration.</a>'
 					;
