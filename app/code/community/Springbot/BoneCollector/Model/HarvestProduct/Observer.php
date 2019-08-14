@@ -34,7 +34,7 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 		'image_label',
 	);
 
-	public function harvestProduct($observer)
+	public function onProductSaveAfter($observer)
 	{
 		try {
 			$this->_product = $observer->getEvent()->getProduct();
@@ -49,15 +49,12 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 		}
 	}
 
-	public function deleteProduct($observer)
+	public function onProductDeleteBefore($observer)
 	{
 		$this->_initObserver($observer);
-
 		try{
 			$this->_product   = $observer->getEvent()->getProduct();
 			$entity_id = $this->_product->getId();
-			$storeIds  = $this->_product->getStoreIds();
-
 			foreach(Mage::helper('combine/harvest')->mapStoreIds($this->_product) as $mapped) {
 				$post[] = array(
 					'store_id' => $mapped->getStoreId(),
@@ -66,7 +63,6 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 					'is_deleted' => true,
 				);
 			}
-
 			Mage::helper('combine/harvest')->deleteRemote($post, 'products');
 		} catch (Exception $e) {
 			Mage::logException($e);

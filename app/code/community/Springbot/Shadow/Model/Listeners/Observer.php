@@ -57,6 +57,7 @@ class Springbot_Shadow_Model_Listeners_Observer	{
 			$storeId = Mage::app()->getStore()->getStoreId();
 
 			$this->runHealthcheck($storeId);
+			$this->scrapeEntities($storeId);
 
 			$this->runQueueCleanup();
 
@@ -68,8 +69,7 @@ class Springbot_Shadow_Model_Listeners_Observer	{
 
 	public function runQueueCleanup()
 	{
-		// global scope, no need for store_id
-		// run every hour
+		// global scope, no need for store_id, run every hour
 		if (Springbot_Shadow_Model_Timer::fire('cleanup', 0, 60)) {
 			Springbot_Boss::internalCallback('work:cleanup');
 		}
@@ -81,6 +81,29 @@ class Springbot_Shadow_Model_Listeners_Observer	{
 			$this->querySpringbot($storeId);
 			if (!Springbot_Boss::isCron()) {
 				Springbot_Boss::startWorkManager();
+			}
+		}
+	}
+
+	public function scrapeEntities($storeId)
+	{
+		if (Springbot_Shadow_Model_Timer::fire('scrape', $storeId, 10)) {
+			$lastPostedCouponId = Mage::getStoreConfig('springbot/tmp/last_coupon_id');
+			if (!$lastPostedCouponId) {
+				$lastPostedCouponId = 0;
+			}
+			$couponsToPost = Mage::getModel('salesrule/coupon')->getCollection()
+				->addFieldToFilter('coupon_id', array('gt' => $lastPostedCouponId));
+
+			$couponsToPost->getSelect()->order('coupon_id', 'ASC');
+			$lastFoundCouponId = null;
+			foreach ($couponsToPost as $couponToPost) {
+				Springbot_Boss::scheduleJob('post:coupon', array('i' => $couponToPost->getId()), Springbot_Services_Priority::LISTENER, 'listener');
+				$lastFoundCouponId = $couponToPost->getId();
+			}
+			if (($lastFoundCouponId) && ($lastPostedCouponId != $lastFoundCouponId)) {
+				Mage::getModel('core/config')->saveConfig('springbot/tmp/last_coupon_id', $lastFoundCouponId, 'default', 0);
+				Mage::getConfig()->cleanCache();
 			}
 		}
 	}
@@ -128,8 +151,7 @@ class Springbot_Shadow_Model_Listeners_Observer	{
 				$referer = isset($parsed['host']) ? $parsed['host'] : null;
 
 				if($referer != $host) {
-					Springbot_Log::debug("refered by $referer");
-					if($host) {
+					Springbot_Log::debug("refered by $referer"); if($host) {
 						$params->sb_referer_host = $referer;
 					}
 				}
@@ -146,19 +168,21 @@ class Springbot_Shadow_Model_Listeners_Observer	{
 	protected function _setSpringbotRedirectQueueCookie($param)
 	{
 		$redirectQueue = Mage::getModel('core/cookie')->get(self::COOKIE_NAME);
-		$cookieValues  = explode(self::TOKEN_DELIMITER,$redirectQueue);
 
-		if (count($cookieValues) >= self::MAXIMUM_IDS_SAVED) {
-			$oldestValue = array_shift($cookieValues);
+		if(!empty($redirectQueue)) {
+			$cookieValues  = explode(self::TOKEN_DELIMITER, $redirectQueue);
+
+			if (count($cookieValues) >= self::MAXIMUM_IDS_SAVED) {
+				$oldestValue = array_shift($cookieValues);
+			}
+
+			if (end($cookieValues) != $param) {
+				$cookieValues[] = $param;
+			}
+
+			$redirectQueue = implode(self::TOKEN_DELIMITER, $cookieValues);
+			$this->_setCookie(self::COOKIE_NAME, $redirectQueue);
 		}
-
-		if (end($cookieValues) != $param) {
-			$cookieValues[] = $param;
-		}
-
-		$redirectQueue = implode(self::TOKEN_DELIMITER, $cookieValues);
-
-		$this->_setCookie(self::COOKIE_NAME, $redirectQueue);
 	}
 
 	protected function _setCookie($name, $value)

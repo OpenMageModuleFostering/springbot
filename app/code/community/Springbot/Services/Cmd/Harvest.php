@@ -15,6 +15,8 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services_Abstract
 		'customers',
 		'guests',
 		'subscribers',
+		'coupons',
+		'rules',
 		//'carts',
 	);
 
@@ -197,7 +199,6 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services_Abstract
 
 		Springbot_Log::harvest("Segmenting {$keyUpper}");
 		$scheduler = Mage::getModel('combine/cron_queue_batch');
-
 
 		$this->_reportHarvestStartTime($this->getHarvestId(), $storeId, $key);
 

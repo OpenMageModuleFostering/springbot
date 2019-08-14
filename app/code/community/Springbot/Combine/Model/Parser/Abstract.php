@@ -171,11 +171,15 @@ class Springbot_Combine_Model_Parser_Abstract extends Varien_Object
 
 	protected function _getSkuFailsafe($product)
 	{
-		if ($sku = $product->getSku()) {
-			return $sku;
-		}
-		else {
-			return Springbot_Boss::NO_SKU_PREFIX .$product->getEntityId();
+		if($product instanceof Mage_Catalog_Model_Product) {
+			// Use array accessor here because getSku method
+			// use the type instance's sku (i.e. the child sku)
+			if ($sku = $product['sku']) {
+				return $sku;
+			}
+			else {
+				return Springbot_Boss::NO_SKU_PREFIX . $product->getEntityId();
+			}
 		}
 	}
 

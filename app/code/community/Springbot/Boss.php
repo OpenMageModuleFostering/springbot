@@ -2,7 +2,6 @@
 
 class Springbot_Boss
 {
-	private static $_loggers;
 	private static $_currentStore;
 
 	const EVENT_FILENAME      = 'Springbot-EventHistory.csv';
@@ -56,7 +55,6 @@ class Springbot_Boss
 
 	/**
 	 *
-	 *
 	 * @param string $method
 	 * @param array $args
 	 * @param bool $background
@@ -71,9 +69,15 @@ class Springbot_Boss
 		$log = Mage::helper('combine')->getSpringbotLog();
 		$nohup = Mage::helper('combine')->nohup();
 		$nice = Mage::helper('combine')->nice();
-
 		$cmd = "{$nohup} {$nice} {$php} {$dir}/shell/springbot.php {$fmt} {$method} >> {$log} 2>> {$err} {$bkg}";
-		return self::spawn($cmd);
+
+		try {
+			$ret = self::spawn($cmd);
+		}
+		catch (Exception $e) {
+			$ret = null;
+		}
+		return $ret;
 	}
 
 	/**
@@ -151,7 +155,7 @@ class Springbot_Boss
 
 	public static function getEventHistoryFilename()
 	{
-		return Mage::getBaseDir('var') . DS . 'log' . DS . self::EVENT_FILENAME;
+		return Mage::getBaseDir('log') . DS . self::EVENT_FILENAME;
 	}
 
 	public static function isCron()
@@ -161,13 +165,9 @@ class Springbot_Boss
 
 	public static function storeIdsExist()
 	{
-		$configValues = Mage::getStoreConfig('springbot/config');
-		$storeIdStr = 'store_id_';
-		foreach ($configValues as $configName => $configValue) {
-			if(substr($configName, 0, strlen($storeIdStr)) == $storeIdStr) {
-				if (!is_numeric($configValue)) {
-					return false;
-				}
+		foreach (Mage::app()->getStores() as $store) {
+			if (!Mage::getStoreConfig('springbot/config/store_id_' . $store->getId())) {
+				return false;
 			}
 		}
 		return true;

@@ -20,7 +20,7 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 
 	protected $_order;
 
-	public function purchaseHarvest($observer)
+	public function onFrontendOrderSaveAfter($observer)
 	{
 		if($this->_getCheckoutSession()->getSpringbotLogPurchaseAction() === true) {
 			$this->callPurchaseLogAction($observer);
@@ -32,12 +32,12 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 		}
 	}
 
-	public function purchaseHarvestAdmin($observer)
+	public function onAdminOrderSaveAfter($observer)
 	{
 		$this->_purchaseHarvest($observer, false);
 	}
 
-	public function purchaseLogAction($observer)
+	public function onFrontendOrderPlaceAfter($observer)
 	{
 		$this->_initObserver($observer);
 		$this->_getCheckoutSession()->setSpringbotLogPurchaseAction(true);

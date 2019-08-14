@@ -6,15 +6,10 @@
 class Springbot_Shell
 {
 	protected $_action;
-
 	protected $_type;
-
 	protected $_appCode     = 'admin';
-
 	protected $_appType     = 'store';
-
 	protected $_magentoRootDir;
-
 	protected $_args;
 
 	protected $_registry = array(
@@ -22,11 +17,13 @@ class Springbot_Shell
 			'attributeSets'         => 'Springbot_Services_Harvest_AttributeSets',
 			'carts'                 => 'Springbot_Services_Harvest_Carts',
 			'categories'            => 'Springbot_Services_Harvest_Categories',
+			'coupons' 				=> 'Springbot_Services_Harvest_Coupons',
 			'customerAttributeSets' => 'Springbot_Services_Harvest_CustomerAttributeSets',
 			'customers'             => 'Springbot_Services_Harvest_Customers',
 			'guests'                => 'Springbot_Services_Harvest_Guests',
 			'products'              => 'Springbot_Services_Harvest_Products',
 			'purchases'             => 'Springbot_Services_Harvest_Purchases',
+			'rules'                 => 'Springbot_Services_Harvest_Rules',
 			'subscribers'           => 'Springbot_Services_Harvest_Subscribers',
 		),
 		'post'          => array(
@@ -34,10 +31,12 @@ class Springbot_Shell
 			'attributeSet' => 'Springbot_Services_Post_AttributeSet',
 			'cart'         => 'Springbot_Services_Post_Cart',
 			'category'     => 'Springbot_Services_Post_Category',
+			'coupon'       => 'Springbot_Services_Post_Coupon',
 			'customer'     => 'Springbot_Services_Post_Customer',
 			'json'         => 'Springbot_Services_Post_Json',
 			'product'      => 'Springbot_Services_Post_Product',
 			'purchase'     => 'Springbot_Services_Post_Purchase',
+			'rule'         => 'Springbot_Services_Post_Rule',
 			'subscriber'   => 'Springbot_Services_Post_Subscriber',
 			'jsonstring'   => 'Springbot_Services_Post_Jsonstring'
 		),

@@ -1,39 +1,44 @@
 <?php
 class Springbot_Bmbleb_LoginController extends Mage_Adminhtml_Controller_Action
 {
-    const CONFIG_VAR_FAMILY			   ="springbot";
-	const CONFIG_VAR_GROUP			   ="config";
-	private $configVars				   =array();
-
-	protected function _initAction() {
+	protected function _initAction()
+	{
 		$this->loadLayout();
 		return $this;
 	}
-	public function indexAction() {
-      //  $this->_forward('edit');
-		      $this->loadLayout()
-      			->_addContent($this->getLayout()->createBlock('bmbleb/adminhtml_bmbleb_login'))
-      			->renderLayout();
-	}
-    public function newAction() {
-     //   $this->_forward('edit');
-			      $this->loadLayout()
-      			->_addContent($this->getLayout()->createBlock('bmbleb/adminhtml_bmbleb_login'))
-      			->renderLayout();
-    }
-	public function editAction() {
-        $this->loadLayout()
-      			->_addContent($this->getLayout()->createBlock('bmbleb/adminhtml_bmbleb_login'))
-      			->renderLayout();
-    }
-    public function loginAction() {
 
-        $email 					  = $this->getRequest()->getParam('email');
-        $pass 					  = $this->getRequest()->getParam('password');
+	public function indexAction()
+	{
+		$this->loadLayout()
+			->_addContent($this->getLayout()->createBlock('bmbleb/adminhtml_bmbleb_login'))
+			->renderLayout();
+	}
+
+    public function newAction()
+	{
+		$this->loadLayout()
+			->_addContent($this->getLayout()->createBlock('bmbleb/adminhtml_bmbleb_login'))
+			->renderLayout();
+    }
+
+	public function editAction()
+	{
+        $this->loadLayout()
+			->_addContent($this->getLayout()->createBlock('bmbleb/adminhtml_bmbleb_login'))
+			->renderLayout();
+    }
+
+    public function loginAction()
+	{
+        $email = $this->getRequest()->getParam('email');
+        $pass = $this->getRequest()->getParam('password');
 
         $bmblebAccount = Mage::helper('bmbleb/Account');
         $bmblebAccount->setIsLoggedIn(false);
-        $url = $this->fetchConfigVariable('api_url','https://api.springbot.com/').'api/registration/login';
+		if (!($url = Mage::getStoreConfig('springbot/config/api_url'))) {
+			$url = 'https://api.springbot.com/';
+		}
+        $url .= 'api/registration/login';
 
 		try {
 			$client = new Varien_Http_Client($url);
@@ -52,25 +57,15 @@ class Springbot_Bmbleb_LoginController extends Mage_Adminhtml_Controller_Action
 			Mage::getSingleton('adminhtml/session')->addError($result['message'].' or service unavailable from '.$url);
 			$this->_redirect('bmbleb/adminhtml_index/auth');
 		} else {
-			if ($result['token']=='') {
+			if ($result['token'] == '') {
 				Mage::getSingleton('adminhtml/session')->addError('Login denied by Springbot');
 				$this->_redirect('bmbleb/adminhtml_index/auth');
 			} else {
-				Mage::log('Email->'.$email.' Token->'.$result['token']);
+				Mage::log('Email->' . $email.' Token->' . $result['token']);
 				$bmblebAccount->setSavedAccountInformation($email,$pass,$result['token']);
 				$this->_redirect('bmbleb/adminhtml_index/index');
 			}
 		}
     }
-	private function fetchConfigVariable($varName,$default_value='')
-	{
-	 	$this->configVars = Mage::getStoreConfig(self::CONFIG_VAR_FAMILY.'/'.self::CONFIG_VAR_GROUP, Mage::app()->getStore());
 
-	    if (isset($this->configVars[$varName])) {
-		 	  	$rtnValue  = $this->configVars[$varName];
-		} else {
-		   		$rtnValue = $default_value;
-		}
-		return $rtnValue;
-	}
 }

@@ -24,9 +24,7 @@ class Springbot_Combine_Model_Redirect extends Springbot_Combine_Model_Abstract
 	public function getAttributionIds()
 	{
 		$collection = Mage::getModel('combine/redirect')->getCollection()->loadByEmail($this->getEmail());
-
 		$ids = $collection->getAllIds();
-
 		return $ids;
 	}
 }

@@ -99,9 +99,6 @@ class Springbot_Log
 	public static function remote($message, $id = 1, $priority = 5, $alert = false)
 	{
 		$id = (is_null($id)) ? 1 : $id;
-
-		$struct = new stdClass;
-
 		if($storeId = Mage::helper('combine/harvest')->getSpringbotStoreId($id)) {
 			$ar = array(
 				'store_id' => $storeId,
@@ -115,9 +112,7 @@ class Springbot_Log
 			if($alert) {
 				$ar['log_type'] = 'ALERT';
 			}
-
-			$struct->{$storeId} = (object) $ar;
-
+			$struct = array($storeId => $ar);
 			$api = Mage::getModel('combine/api');
 			$payload = $api->wrap('logs', $struct);
 			$api->reinit()->call('logs', $payload);

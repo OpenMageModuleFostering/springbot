@@ -45,17 +45,6 @@ class Springbot_BoneCollector_Model_HarvestAbstract
 		return Mage::helper('combine/parser')->getTopLevelSku($product);
 	}
 
-	public function getCommand($method)
-	{
-		return $this->getPhpExec() . ' '
-			. $magentoRootDir
-			. self::SPRINGBOT_DIRECTORY
-			. self::BOT_SERVICES_DIRECTORY
-			. self::BOT_SERVICES . ' '
-			. $method . ' '
-			;
-	}
-
 	public function doSend($object, $sessionKey)
 	{
 		$json    = $object->toJson();

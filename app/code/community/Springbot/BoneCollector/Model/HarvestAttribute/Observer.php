@@ -2,12 +2,11 @@
 
 class Springbot_BoneCollector_Model_HarvestAttribute_Observer extends Springbot_BoneCollector_Model_HarvestAbstract
 {
-	public function attributeSave($observer)
+	public function onAdminAttributeSaveAfter($observer)
 	{
 		try {
 			$this->_initObserver($observer);
 			$attribute = $observer->getEvent()->getAttribute();
-
 			if($attribute->getIsUserDefined()) {
 				if($this->doSend($attribute, 'sb_eav_entity_attribute_obs_hash')) {
 					Springbot_Log::debug("Attempting to post parent attribute sets");
@@ -21,7 +20,7 @@ class Springbot_BoneCollector_Model_HarvestAttribute_Observer extends Springbot_
 		}
 	}
 
-	public function attributeSetSave($observer)
+	public function onAdminAttributeSetSaveAfter($observer)
 	{
 		try {
 			$attribute = $observer->getEvent()->getAttribute();
@@ -41,8 +40,6 @@ class Springbot_BoneCollector_Model_HarvestAttribute_Observer extends Springbot_
 
 		// invalidate cache as attributes are added to set
 		$attrIds = $helper->getAttributesBySet($id)->getAllIds();
-
-		return $helper->getAttributeSetById($id)
-			->setNestedAttributeIds($attrIds);
+		return $helper->getAttributeSetById($id)->setNestedAttributeIds($attrIds);
 	}
 }

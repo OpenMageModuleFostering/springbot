@@ -2,23 +2,20 @@
 
 class Springbot_BoneCollector_Model_HarvestCategory_Observer extends Springbot_BoneCollector_Model_HarvestAbstract
 {
-	public function saveCategory($observer)
+	public function onCategorySaveAfter($observer)
 	{
 		$this->_initObserver($observer);
-
 		$categoryId = $observer->getEvent()->getCategory()->getEntityId();
-
 		if(!empty($categoryId)) {
             Springbot_Boss::scheduleJob('post:category', array('i' => $categoryId), Springbot_Services_Priority::LISTENER, 'listener');
 		}
 	}
 
 
-	public function deleteCategory($observer)
+	public function onCategoryDeleteAfter($observer)
 	{
 		try{
 			$category = $observer->getEvent()->getCategory();
-
 			$this->_initObserver($observer);
 			foreach(Mage::helper('combine/harvest')->mapStoreIds($category) as $mapped) {
 				$deleted = array(
@@ -27,7 +24,6 @@ class Springbot_BoneCollector_Model_HarvestCategory_Observer extends Springbot_B
 					'is_deleted' => true,
 				);
 			}
-
 			Mage::helper('combine/harvest')->deleteRemote($deleted, 'categories');
 		} catch (Exception $e) {
 			Mage::logException($e);

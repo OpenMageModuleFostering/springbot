@@ -36,7 +36,7 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 	 *
 	 * @param Varien_Event_Observer $observer
 	 */
-	public function addToCartHarvest($observer)
+	public function onFrontendQuoteSaveAfter($observer)
 	{
 		try {
 			$this->_initObserver($observer);
@@ -84,14 +84,14 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 	 *
 	 * @param Varien_Event_Observer $observer
 	 */
-	public function captureSku($observer)
+	public function onFrontendCartAddProduct($observer)
 	{
 		$this->_initObserver($observer);
 		$quoteId = Mage::getSingleton("checkout/session")->getQuote()->getId();
 
 		$eventDatetime        = date("Y-m-d H:i:s");
 		$openModeAppend       = 'a';
-		$eventHistoryFilename = Mage::getBaseDir().'/var/log/Springbot-EventHistory.csv';
+		$eventHistoryFilename = Mage::getBaseDir('log') . DS . 'Springbot-EventHistory.csv';
 
 		try {
 			$storeId       = Mage::app()->getStore()->getStoreId();

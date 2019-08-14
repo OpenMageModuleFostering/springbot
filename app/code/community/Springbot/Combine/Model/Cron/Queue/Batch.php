@@ -22,7 +22,7 @@ class Springbot_Combine_Model_Cron_Queue_Batch extends Varien_Object
 		$sql = $this->toSql();
 		if($rows = $this->_rowCount()) {
 			Springbot_Log::info("Inserting {$rows} rows into {$this->_getTablename()}");
-			//Springbot_Log::debug("Running batch insert : {$sql}");
+			#Springbot_Log::debug("Running batch insert : {$sql}");
 			$rows = $this->_getWriter()->exec($sql);
 		}
 		Springbot_Log::info("{$rows} rows inserted");
@@ -32,7 +32,7 @@ class Springbot_Combine_Model_Cron_Queue_Batch extends Varien_Object
 	public function push($args)
 	{
 		if($this->_isValid($args)) {
-			//Springbot_Log::debug("Pushing {$args['method']} : {$args['args']}");
+			#Springbot_Log::debug("Pushing {$args['method']} : {$args['args']}");
 			$row = $this->_getRowModel();
 			$row->setData($args);
 			$this->_stack[] = $row;

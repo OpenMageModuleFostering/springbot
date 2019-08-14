@@ -16,7 +16,6 @@ class Springbot_Combine_Model_Parser_Subscriber extends Springbot_Combine_Model_
 	public function isCustomer()
 	{
 		$customerId = $this->_subscriber->getCustomerId();
-
 		return !empty($customerId);
 	}
 

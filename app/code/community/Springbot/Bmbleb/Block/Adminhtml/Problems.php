@@ -1,4 +1,5 @@
 <?php
+
 class Springbot_Bmbleb_Block_Adminhtml_Problems extends Mage_Adminhtml_Block_Template
 {
 	public function __construct()
@@ -14,5 +15,4 @@ class Springbot_Bmbleb_Block_Adminhtml_Problems extends Mage_Adminhtml_Block_Tem
 	{
 		return Mage::helper('bmbleb/PluginStatus')->getAllPluginProblems();
 	}
-
 }

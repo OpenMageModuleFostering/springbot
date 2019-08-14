@@ -8,6 +8,17 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 		return $_date->format(DateTime::ATOM);
 	}
 
+	/**
+	 * Converts a store guid into its alphanumeric-only representation if present.
+	 */
+	public function getPublicGuid($storeId)
+	{
+		$guid = Mage::getStoreConfig('springbot/config/store_guid_' . $storeId);
+		if(isset($guid)) {
+			return str_replace('-', '', strtolower($guid));
+		}
+	}
+
 	public function getStoreGuid($storeId)
 	{
 		$guid = Mage::getStoreConfig('springbot/config/store_guid_' . $storeId);
@@ -81,10 +92,23 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 	public function doSendQuote($json)
 	{
 		$obj = json_decode($json);
-		$items = sha1(json_encode((isset($obj->line_items)) ? $obj->line_items : array()));
+		$toHash = '';
+		if (isset($obj->customer_firstname)) {
+			$toHash .= $obj->customer_firstname;
+		}
+		if (isset($obj->customer_lastname)) {
+			$toHash .= $obj->customer_lastname;
+		}
 
-		if(strcmp(Mage::getSingleton('core/session')->getSpringbotPostedQuoteItems(), $items) !== 0) {
-			Mage::getSingleton('core/session')->setSpringbotPostedQuoteItems($items);
+		if (isset($obj->line_items)) {
+			$hash = sha1($toHash . json_encode($obj->line_items));
+		}
+		else {
+			$hash = sha1($toHash . json_encode(array()));
+		}
+
+		if (Mage::getSingleton('core/session')->getSpringbotQuoteHash() !== $hash) {
+			Mage::getSingleton('core/session')->setSpringbotQuoteHash($hash);
 			return true;
 		} else {
 			return false;
@@ -181,12 +205,12 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function getSpringbotErrorLog()
 	{
-		return Mage::getBaseDir('var') . DS . 'log' . DS . Springbot_Log::ERRFILE;
+		return Mage::getBaseDir('log') . DS . Springbot_Log::ERRFILE;
 	}
 
 	public function getSpringbotLog()
 	{
-		return Mage::getBaseDir('var') . DS . 'log' . DS . Springbot_Log::LOGFILE;
+		return Mage::getBaseDir('log') . DS . Springbot_Log::LOGFILE;
 	}
 
 	public function isEmpty($obj)
@@ -209,10 +233,8 @@ class Springbot_Combine_Helper_Data extends Mage_Core_Helper_Abstract
 		$maxRecSize = 65536;
 		if (empty($logName)) {
 			$fullFilename = Mage::getBaseDir('log') . DS . Springbot_Log::LOGFILE;
-		} elseif (strpos($logName, '/') === 0){
-			$fullFilename = $logName;
 		} else {
-			$fullFilename = Mage::getBaseDir('log') . '/' . $logName;
+			$fullFilename = Mage::getBaseDir('log') . DS . str_replace('../', '', $logName);
 		}
 
 		$buffer = '';

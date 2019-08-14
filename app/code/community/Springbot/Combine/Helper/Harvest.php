@@ -71,23 +71,28 @@ class Springbot_Combine_Helper_Harvest extends Mage_Core_Helper_Abstract
 	public function getPhpExec()
 	{
 		if(!isset($this->_phpExec)) {
-			$php = Mage::getStoreConfig('springbot/config/php_exec');
+			try {
+				$php = Mage::getStoreConfig('springbot/config/php_exec');
 
-			if((empty($php))) {
-				// This prevents the system command from outputting to apache
-				ob_start();
-				if(empty($php) || !file_exists($php)) {
-					$php = Springbot_Boss::spawn('which php5 2> /dev/null');
+				if((empty($php))) {
+					// This prevents the system command from outputting to apache
+					ob_start();
+					if(empty($php) || !file_exists($php)) {
+						$php = Springbot_Boss::spawn('which php5 2> /dev/null');
+					}
+					if(empty($php) || !file_exists($php)) {
+						$php = Springbot_Boss::spawn('which php 2> /dev/null');
+					}
+					if(empty($php) || !file_exists($php)) {
+						$php = 'php';
+					}
+					ob_end_clean();
 				}
-				if(empty($php) || !file_exists($php)) {
-					$php = Springbot_Boss::spawn('which php 2> /dev/null');
-				}
-				if(empty($php) || !file_exists($php)) {
-					$php = 'php';
-				}
-				ob_end_clean();
+				$this->_phpExec = $php;
 			}
-			$this->_phpExec = $php;
+			catch (Exception $e) {
+				return '';
+			}
 		}
 		return $this->_phpExec;
 	}
@@ -215,10 +220,13 @@ class Springbot_Combine_Helper_Harvest extends Mage_Core_Helper_Abstract
 			->reset(Zend_Db_Select::COLUMNS)
 			->reset(Zend_Db_Select::WHERE)
 			->reset(Zend_Db_Select::ORDER)
-			->columns($idFieldName)
-			->where("{$idFieldName} < {$lastId}")
+			->columns("$idFieldName")
 			->order("{$idFieldName} DESC")
 			->limit(1, $size);
+
+		$collection->addFieldToFilter($idFieldName, array(
+			'lt' => $lastId
+		));
 
 		$result = $collection->getFirstItem();
 		if ($result) {

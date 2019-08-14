@@ -15,8 +15,7 @@
 
 class Springbot_DataServices_HarvestingManager
 {
-	const MAGENTO_PACKAGE_VERSION = '1.2.1.4';
-	const ZERO                    = 0;
+	const MAGENTO_PACKAGE_VERSION = '1.3.0.9';
 	const SUCCESSFUL_RESPONSE     = 'ok';
 	const DATE_FORMAT             = 'Y-m-d H:i:s';
 
@@ -143,12 +142,13 @@ class Springbot_DataServices_HarvestingManager
 		$this->showMessage('['.__METHOD__.'] '.' '.$error_msg);
 	}
 
-	private function setConfigVar($varName,$varValue)
+	private function setConfigVar($varName, $varValue)
 	{
+		$varName = trim($varName);
 		if(!preg_match('/.*\/.*\/.*/', $varName)) {
 			$varName = 'springbot/config/' . $varName;
 		}
-		if (!empty($varName)) {
+		if (!empty($varName) && ($varName != 'springbot/config/php_exec')) {
 			$this->set_config($varName, $varValue);
 		}
 		return;
@@ -254,7 +254,7 @@ class Springbot_DataServices_HarvestingManager
 					$this->showMessage('Store->'.$storeNumber.' had '.$actionCount.' actions extracted from '.$eventHistoryArchiveFilename);
 					fclose($handle);
 				}
-				if (sizeof($logData)==self::ZERO) {
+				if (sizeof($logData) == 0) {
 					$this->showMessage('Empty '.$eventHistoryArchiveFilename);
 				} else {
 					$this->showMessage('Delivering '.$eventHistoryArchiveFilename);
@@ -297,8 +297,7 @@ class Springbot_DataServices_HarvestingManager
 	private function fileReplace($target,$source)
 	{
 		$openModeOutput = 'w';
-		$origSize       = self::ZERO;
-		$newSize        = self::ZERO;
+		$origSize       = 0;
 
 		$magentoRootDir = $this->rootAppPath;
 		if (substr($target,0,1) != '/') {
@@ -426,7 +425,7 @@ class Springbot_DataServices_HarvestingManager
 		return Mage::getModel('core/config')->saveConfig($path, $value, $scope, $scope_id);
 	}
 
-	private function showMessage($msg,$abort=false,$ignoreMessage=true)
+	private function showMessage($msg, $abort=false, $ignoreMessage=true)
 	{
 		Springbot_Log::debug($msg);
 		if ($ignoreMessage==false) {

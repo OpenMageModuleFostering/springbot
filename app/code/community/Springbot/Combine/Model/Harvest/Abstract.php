@@ -30,9 +30,9 @@ class Springbot_Combine_Model_Harvest_Abstract
 	{
 		if($this->getCount()) {
 			$this->_getIterator()->walk(
-						$this->getSelect(),
-						array(array($this, 'step'))
-					);
+				$this->getSelect(),
+				array(array($this, 'step'))
+			);
 			// Post leftover segment
 			$this->_total += count($this->_segmentQueue);
 			$this->postSegment();

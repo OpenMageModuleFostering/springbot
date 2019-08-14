@@ -59,16 +59,13 @@ class Springbot_Combine_Model_Parser_Purchase_Item extends Springbot_Combine_Mod
 
 		if(!isset($this->_parentProduct))
 		{
-			if($config = $item->getProductOptionByCode('super_product_config'))
-			{
+			if($config = $item->getProductOptionByCode('super_product_config')) {
 				$parentProductId = isset($config['product_id']) ? $config['product_id'] : null;
 			}
-			else if($item->hasParentItemId())
-			{
+			else if($item->hasParentItemId()) {
 				$parentProductId = $item->getParentItem()->getProductId();
 			}
-			if(!isset($parentProductId))
-			{
+			if(!isset($parentProductId)) {
 				$parentProductId = $item->getProductId();
 			}
 			$this->_parentProduct = $this->_getProduct($parentProductId);

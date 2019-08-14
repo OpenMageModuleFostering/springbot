@@ -2,8 +2,6 @@
 /**
  * BoneCollector Event Listener (Capture SKU when Product Viewed)
  *
- * @version		v1.0.0 - 5/28/2013
- *
  * @category    Magento Integrations
  * @package     springbot
  * @author		William Seitz
@@ -16,32 +14,31 @@ class Springbot_BoneCollector_Model_HarvestCaptureSKU_Observer extends Springbot
 {
 	const VERSION						= '1.2.0';
 	const METHOD						= 'getsku';
-	const LISTENER_PUBLIC_NAME			= 'CaptureSKU Harvesting Listener: ';
-	const ZERO							= 0;
 
-	public function captureskuharvest($observer)
+	public function onFrontendProductView($observer)
 	{
 		$controllerName = Mage::app()->getRequest()->getControllerName();
 		$actionName     = Mage::app()->getRequest()->getActionName();
 		$routerName     = Mage::app()->getRequest()->getRouteName();
 
-		if ($this->viewingProductDetailPage($controllerName,$actionName,$routerName)) {
+		if ($this->_viewingProductDetailPage($controllerName,$actionName,$routerName)) {
 			$this->_initObserver($observer);
 			$productData = $observer->getEvent()->getProduct();
 			$entityViewed         = $productData['sku'];
 			$eventDatetime        = date("Y-m-d H:i:s");
 			$openModeAppend       = 'a';
-			$eventHistoryFilename = Mage::getBaseDir().'/var/log/Springbot-EventHistory.csv';
+			$eventHistoryFilename = Mage::getBaseDir('log') . DS . 'Springbot-EventHistory.csv';
 			$urlViewed            = Mage::helper('core/url')->getCurrentUrl();
-			$user_agent           = Mage::helper('core/http')->getHttpUserAgent();
+			$userAgent           = Mage::helper('core/http')->getHttpUserAgent();
 
-			if ($this->qualifyURL($urlViewed,$user_agent)) {
+			if ($this->qualifyURL($urlViewed, $userAgent)) {
 				try {
 					$lastCatId     = $this->_getLastCategory();
 					$visitorIP     = Mage::helper('core/http')->getRemoteAddr(true);
 					$storeId       = Mage::app()->getStore()->getStoreId();
 					$fHandle       = fopen($eventHistoryFilename,$openModeAppend);
-					$viewedMessage = array('view',
+					$viewedMessage = array(
+						'view',
 						$eventDatetime,
 						$urlViewed,
 						$entityViewed,
@@ -50,9 +47,8 @@ class Springbot_BoneCollector_Model_HarvestCaptureSKU_Observer extends Springbot
 						$lastCatId
 					);
 					fputcsv($fHandle,$viewedMessage,',');
-					fclose ($fHandle);
-
-				}  catch (Exception $e)  {
+					fclose($fHandle);
+				} catch (Exception $e)  {
 					Mage::log('Unknown exception opening '.$eventHistoryFilename);
 				}
 			}
@@ -60,7 +56,7 @@ class Springbot_BoneCollector_Model_HarvestCaptureSKU_Observer extends Springbot
 		return;
 	}
 
-	private function viewingProductDetailPage($controllerName,$actionName,$routerName)
+	private function _viewingProductDetailPage($controllerName,$actionName,$routerName)
 	{
 		if ($controllerName == 'product'
 			&&  $actionName == 'view'
@@ -76,26 +72,26 @@ class Springbot_BoneCollector_Model_HarvestCaptureSKU_Observer extends Springbot
 		return Mage::helper('combine')->getLastCategoryId();
 	}
 
-	private function qualifyURL($url,$user_agent)
+	private function qualifyURL($url, $userAgent)
 	{
-		$rtn = true;
-
-		if (strpos($url,'/api')  >  self::ZERO
-			|| strpos($url,'/ajax') >  self::ZERO
-			|| strpos($url,'/soap') >  self::ZERO) {
-				$rtn = false;
-			} else {
-				$rtn = false;
-				if ($this->is_bot($user_agent) == false &&  $this->urlIsIPAddress($url)== false) {
-					$rtn = true;
-				}
-			}
-		return $rtn;
+		if (
+			strpos($url,'/api')  >  0 ||
+			strpos($url,'/ajax') >  0 ||
+			strpos($url,'/soap') >  0
+		) {
+			return false;
+		}
+		else if ($this->is_bot($userAgent) == false &&  $this->urlIsIPAddress($url)== false) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private function urlIsIPAddress($url)
 	{
-		$numericComponents = self::ZERO;
+		$numericComponents = 0;
 		$ipComponents      = explode('.',$url);
 
 		foreach($ipComponents as $ipVal) {

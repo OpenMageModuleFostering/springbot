@@ -45,23 +45,18 @@ class Springbot_Combine_Model_Parser_Quote_Item extends Springbot_Combine_Model_
 
 	public function getParentProduct()
 	{
-		if(!isset($this->_parentProduct))
-		{
+		if(!isset($this->_parentProduct)) {
 			$item = $this->_item;
 
-			if($type = $item->getOptionByCode('product_type'))
-			{
-				if($parentProductId = $type->getProductId())
-				{
+			if($type = $item->getOptionByCode('product_type')) {
+				if($parentProductId = $type->getProductId()) {
 					$this->_parentProduct = Mage::getModel('catalog/product')->load($parentProductId);
 				}
 			}
-			else if($item->hasParentItemId())
-			{
+			else if($item->hasParentItemId()) {
 				$this->_parentProduct = $item->getParentItem()->getProduct();
 			}
-			else
-			{
+			else {
 				$this->_parentProduct = $item->getProduct();
 			}
 		}

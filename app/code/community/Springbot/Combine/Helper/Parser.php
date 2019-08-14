@@ -59,7 +59,7 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 	}
 
 	/**
-	 * Gets accessible sku, product is visbible from frontend
+	 * Gets accessible sku, product is visible from frontend
 	 *
 	 * @param Mage_Sales_Model_Order_Item
 	 * @return string
@@ -78,9 +78,12 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 
 	public function isAccessible($product)
 	{
-		return $product instanceof Mage_Catalog_Model_Product &&
-			!($product->getVisibility() ==  Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE ||
-			$product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
+		return
+			($product instanceof Mage_Catalog_Model_Product) &&
+			!(
+				$product->getVisibility() == Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE ||
+				$product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_DISABLED
+			);
 	}
 
 	/**

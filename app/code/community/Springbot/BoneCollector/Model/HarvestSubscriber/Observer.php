@@ -2,7 +2,7 @@
 
 class Springbot_BoneCollector_Model_HarvestSubscriber_Observer extends Springbot_BoneCollector_Model_HarvestAbstract
 {
-	public function saveSubscriber($observer)
+	public function onSubscriberSaveAfter($observer)
 	{
 		try {
 			$this->_initObserver($observer);
@@ -20,7 +20,7 @@ class Springbot_BoneCollector_Model_HarvestSubscriber_Observer extends Springbot
 		}
 	}
 
-	public function deleteSubscriber($observer)
+	public function onSubscriberDeleteBefore($observer)
 	{
 		try {
 			// Runs blocking in session to guarantee record existence
