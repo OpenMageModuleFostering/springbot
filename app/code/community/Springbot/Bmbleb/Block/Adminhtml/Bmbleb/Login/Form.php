@@ -75,6 +75,7 @@ class Springbot_Bmbleb_Block_Adminhtml_Bmbleb_Login_Form extends Mage_Adminhtml_
 		try {
 			$client = new Varien_Http_Client($url);
 			$client->setRawData($rawJSON);
+			$client->setHeaders('Content-type: application/json');
 			$req = $client->request('POST');
 		} catch (Exception $e) {
 			Springbot_Log::error($e);

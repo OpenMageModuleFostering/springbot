@@ -76,7 +76,6 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 				'store_id' => $storeId,
 				'quantity' => $qtyAdded,
 			));
-			Springbot_Cli::runHealthcheck($storeId);
 		}
 		catch (Exception $e) {
 			Springbot_Log::error($e);
@@ -125,7 +124,6 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 					}
 				}
 			}
-			Springbot_Cli::runHealthcheck($storeId);
 		}
 		catch (Exception $e) {
 			Springbot_Log::error($e);

@@ -50,6 +50,12 @@ class Springbot_Services_Cmd_Healthcheck extends Springbot_Services
 		}
 	}
 
+	public function doFinally()
+	{
+		Springbot_Log::debug("Scheduling future jobs from healthcheck job");
+		Springbot_Boss::scheduleFutureJobs($this->getStoreId());
+	}
+
 	private function _scrapeEntities()
 	{
 		$lastPostedCouponId = Mage::getStoreConfig('springbot/tmp/last_coupon_id');

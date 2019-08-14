@@ -5,32 +5,6 @@ class Springbot_Bmbleb_Helper_PluginStatus extends Mage_Core_Helper_Abstract
 	const REPORT_PROBLEMS_INTERVAL_SECONDS = 604800; // Seven days in seconds
 	const TOO_MANY_HOURS                   = 3; // Minimum number of hours since harvest to display warning
 
-	/**
-	 * Check to see if its been a long time since the last checkin
-	 */
-	public function tooLongSinceCheckin()
-	{
-		$currentTime = time();
-		$secondsSinceLastCheckin = null;
-		$mostRecentCheckin = null;
-
-		foreach (Mage::app()->getStores() as $store) {
-			$checkinTimestap = Springbot_Util_Timer::lastRun('healthcheck', $store->getId());
-			$secondsSinceLastCheckin = $currentTime - $checkinTimestap;
-			if (!$mostRecentCheckin || ($secondsSinceLastCheckin < $mostRecentCheckin)) {
-				$mostRecentCheckin = $secondsSinceLastCheckin;
-			}
-		}
-
-		if (($mostRecentCheckin === null) || ($mostRecentCheckin > (self::TOO_MANY_HOURS * 60 * 60))) {
-			return $mostRecentCheckin;
-		}
-		else {
-			return false;
-		}
-	}
-
-
 
 	/**
 	 * Get a list of all potential plugin problems to display on the problems page

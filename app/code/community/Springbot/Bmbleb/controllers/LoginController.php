@@ -43,8 +43,9 @@ class Springbot_Bmbleb_LoginController extends Mage_Adminhtml_Controller_Action
 		try {
 			$client = new Varien_Http_Client($url);
 			$client->setRawData('{"user_id":"'.$email.'", "password":"'.$pass.'"}');
-			$response 	= $client->request('POST');
-			$result		= json_decode($response->getBody(),true);
+			$client->setHeaders('Content-type: application/json');
+			$response = $client->request('POST');
+			$result   = json_decode($response->getBody(),true);
 		}
 		catch (Exception $e) {
 			Springbot_Log::error($e);

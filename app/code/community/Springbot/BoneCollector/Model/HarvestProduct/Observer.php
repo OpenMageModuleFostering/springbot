@@ -43,11 +43,13 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 		$this->_initObserver($observer);
 		try{
 			$this->_product   = $observer->getEvent()->getProduct();
-			$entity_id = $this->_product->getId();
-			foreach(Mage::helper('combine/harvest')->mapStoreIds($this->_product) as $mapped) {
+			$entityId = $this->_product->getId();
+			$helper = Mage::helper('combine/harvest');
+			foreach($helper->mapStoreIds($this->_product) as $mapped) {
+				$sbId = $helper->getSpringbotStoreId($mapped->getStoreId());
 				$post[] = array(
-					'store_id' => $mapped->getStoreId(),
-					'entity_id' => $entity_id,
+					'store_id' => $sbId,
+					'entity_id' => $entityId,
 					'sku' => $this->_getSkuFailsafe($this->_product),
 					'is_deleted' => true,
 				);

@@ -26,11 +26,19 @@ class Springbot_Boss
 	 * @param int $priority
 	 * @param string $queue
 	 * @param int $storeId
-	 * @param bool $requiresAuth
+	 * @param int $minutesInFuture
 	 */
-	public static function scheduleJob($method, array $args, $priority, $queue = 'default', $storeId = null, $requiresAuth = true)
+	public static function scheduleJob($method, array $args, $priority, $queue = 'default', $storeId = null, $minutesInFuture = 0)
 	{
 		if(self::active() && !empty($method)) {
+
+			if (is_int($minutesInFuture) && ($minutesInFuture > 0)) {
+				$nextRunAt = date("Y-m-d H:i:s", strtotime("+{$minutesInFuture} minutes"));
+			}
+			else {
+				$nextRunAt = date("Y-m-d H:i:s");
+			}
+
 			$cronModel = Mage::getModel('combine/cron_queue');
 			$cronModel->setData(array(
 				'method' => $method,
@@ -38,22 +46,21 @@ class Springbot_Boss
 				'priority' => $priority,
 				'command_hash' => sha1($method . json_encode($args)),
 				'queue' => $queue,
-				'store_id' => $storeId
+				'store_id' => $storeId,
+				'next_run_at' => $nextRunAt
 			));
+
 			$cronModel->insertIgnore();
 			self::startWorkManager();
-			Springbot_Cli::runHealthcheck($storeId);
 		}
 	}
 
-	public static function insertEvent($data, $runHealthcheck = false)
+	public static function insertEvent($data)
 	{
 		if(self::active()) {
 			if(!isset($data['type']) || !isset($data['store_id'])) {
 				Springbot_Log::error(new Exception("Invalid action attempted to log"));
 				return;
-			} else {
-				$storeId = $data['store_id'];
 			}
 			$event = Mage::getModel('combine/action');
 			$event->setData($data);
@@ -61,10 +68,6 @@ class Springbot_Boss
 			$event->save();
 
 			Springbot_Log::debug($event->getData());
-
-			if($runHealthcheck) {
-				Springbot_Cli::runHealthcheck($storeId);
-			}
 		}
 	}
 
@@ -109,6 +112,27 @@ class Springbot_Boss
 				Springbot_Cli::internalCallback('work:manager');
 			}
 		}
+	}
+
+	/**
+	 * Schedule all jobs intended to run in the future
+	 *
+	 * @param integer $storeId
+	 */
+	public static function scheduleFutureJobs($storeId = null)
+	{
+		if (is_null($storeId)) {
+			$storeId = Mage::app()->getStore()->getStoreId();
+		}
+
+		// Healthcheck uses default query interval
+		Springbot_Boss::scheduleJob('cmd:healthcheck', array('s' => $storeId), 5, 'listener', $storeId, 5);
+
+		// Send event log every minute
+		Springbot_Boss::scheduleJob('tasks:deliverEventLog', array('s' => $storeId), 5, 'listener', $storeId, 1);
+
+		// Run this in real time, but only every 30 min
+		Springbot_Boss::scheduleJob('work:cleanup', array('s' => $storeId), 5, 'listener', $storeId, 30);
 	}
 
 	/**

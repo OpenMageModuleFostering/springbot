@@ -116,6 +116,10 @@ abstract class Springbot_Services extends Varien_Object
 		return number_format(microtime(true) - $this->_startTime, 3, '.', '');
 	}
 
+	public function doFinally() {
+
+	}
+
 	protected function _humanize($var)
 	{
 		return ucfirst(preg_replace('/\_/', ' ', $var));

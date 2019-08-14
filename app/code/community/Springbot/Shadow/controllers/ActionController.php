@@ -10,8 +10,6 @@ class Springbot_Shadow_ActionController extends Springbot_Shadow_Controller_Acti
 
 		Springbot_Boss::insertEvent($params);
 
-		Springbot_Cli::runHealthcheck();
-
 		// return 1x1 pixel transparent gif
 		$this->getResponse()->setHeader('Content-type', 'image/gif');
 		// needed to avoid cache time on browser side

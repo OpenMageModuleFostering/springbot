@@ -60,7 +60,6 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 					'quantity' => $qty,
 				));
 			}
-			Springbot_Cli::runHealthcheck($storeId);
 		}
 		catch (Exception $e) {
 			Springbot_Log::error($e);

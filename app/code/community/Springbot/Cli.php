@@ -115,34 +115,6 @@ class Springbot_Cli
 		$harvest->run();
 	}
 
-	public static function runHealthcheck($storeId = null, $force = false)
-	{
-		if(is_null($storeId)) {
-			$storeId = Mage::app()->getStore()->getStoreId();
-		}
-
-		// Healthcheck uses default query interval
-		if(Springbot_Util_Timer::fire('healthcheck', $storeId) || $force) {
-			self::async('cmd:healthcheck', array('s' => $storeId));
-		}
-
-		// Send event log every minute
-		if(Springbot_Util_Timer::fire('event_log', $storeId, 1)) {
-			Springbot_Boss::scheduleJob(
-				'tasks:deliverEventLog',
-				array('s' => $storeId),
-				5,
-				'listener',
-				$storeId
-			);
-		}
-
-		// Run this in real time, but only every 30 min
-		if(Springbot_Util_Timer::fire('cleanup', $storeId, 30)) {
-			$cleanup = new Springbot_Services_Work_Cleanup();
-			$cleanup->run();
-		}
-	}
 
 	public static function startWorkManager()
 	{

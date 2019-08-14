@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Springbot_Combine>
-			<version>1.4.1.1</version>
+			<version>1.4.2.1</version>
 		</Springbot_Combine>
 	</modules>
 	<global>

@@ -66,7 +66,6 @@ class Springbot_Combine_Model_Resource_Cron_Queue extends Springbot_Combine_Mode
 	{
 		$cronQueueTable = Mage::getSingleton('core/resource')->getTableName('springbot_cron_queue');
 		$write = $this->_getWriter($cronQueueTable);
-		Springbot_Log::debug($sql);
 		$write->query("UPDATE `{$cronQueueTable}` SET `attempts` = 0 WHERE 1");
 	}
 

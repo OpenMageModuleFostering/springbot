@@ -66,6 +66,19 @@ class Springbot_Combine_Model_Cron_Queue extends Springbot_Combine_Model_Cron
 			}
 		}
 		$this->_post();
+
+		try {
+			Springbot_Log::debug("Scheduling future jobs");
+			Springbot_Boss::scheduleFutureJobs($class->getStoreId());
+
+			if (is_object($class)) {
+				$class->doFinally();
+			}
+		}
+		catch (Exception $e) {
+			Springbot_Log::error($e);
+		}
+
 		return $return;
 	}
 
@@ -90,6 +103,7 @@ class Springbot_Combine_Model_Cron_Queue extends Springbot_Combine_Model_Cron
 				'locked_by' => null,
 			))->save();
 		}
+
 	}
 
 	public function getInstance()

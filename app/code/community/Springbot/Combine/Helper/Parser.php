@@ -160,7 +160,7 @@ class Springbot_Combine_Helper_Parser extends Mage_Core_Helper_Abstract
 				if(Mage::getModel($attribute->getSourceModel())) {
 					$source = $attribute->getSource();
 					if (is_object($source)) {
-						return $source->getOptionText($product->getAttributeText($attributeCode));
+						return $source->getOptionText($product->getData($attributeCode));
 					}
 				}
 			}

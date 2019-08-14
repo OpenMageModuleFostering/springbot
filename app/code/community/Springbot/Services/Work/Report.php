@@ -20,7 +20,7 @@ class Springbot_Services_Work_Report extends Springbot_Services
 		);
 
 		Mage::helper('combine/harvest')->reportHarvestCount($params, $this->getHarvestId());
-		Springbot_Log::remote("Harvested '{$count} {$keyUpper} from store " . $this->getStoreId());
+		Springbot_Log::remote("Harvested {$count} {$keyUpper} from store " . $this->getStoreId(), $this->getStoreId());
 	}
 
 }

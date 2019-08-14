@@ -17,14 +17,6 @@ class Springbot_Bmbleb_Block_Adminhtml_Notifications extends Mage_Adminhtml_Bloc
 					;
 					return array('message' => $message, 'type' => 'success');
 				}
-				else if ($problems = Mage::helper('bmbleb/PluginStatus')->tooLongSinceCheckin()) {
-					$message = 'Springbot has not synced in a while. ' .
-						'<a href="' . $this->getUrl('bmbleb/adminhtml_problems/index') . '">Click here to get more details</a>. ' .
-						'You can turn off Springbot notifications in ' .
-						'<a href="' . $this->getUrl('adminhtml/system_config/edit/section/springbot') . '">Springbot configuration.</a>'
-					;
-					return array('message' => $message, 'type' => 'error');
-				}
 			}
 		}
 		catch (Exception $e) {

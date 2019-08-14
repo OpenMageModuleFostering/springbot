@@ -182,8 +182,6 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services
 
 		$collection = $this->_getCollection($keyUpper, $storeId);
 
-		$this->getHelper()->forecast($collection, $storeId, $keyUpper, $this->getHarvestId());
-
 		$scheduler = Mage::getModel('combine/cron_queue_batch');
 
 		foreach(Mage::helper('combine/harvest')->partitionCollection($collection) as $partition) {
@@ -216,6 +214,8 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services
 		$scheduler = Mage::getModel('combine/cron_queue_batch');
 
 		$this->_reportHarvestStartTime($this->getHarvestId(), $storeId, $key);
+
+		$this->getHelper()->forecast($collection, $storeId, $keyUpper, $this->getHarvestId());
 
 		$count = 0;
 		foreach(Mage::helper('combine/harvest')->partitionCollection($collection, self::SEGMENT_SIZE) as $partition) {
