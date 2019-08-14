@@ -28,7 +28,7 @@ try {
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 } catch (Exception $e) {
-	Springbot_Log::error(new Exception('Install failed clear and retry'));
+	Springbot_Log::error('Install failed clear and retry: ' . $e->getMessage());
 	if (!$session->getSbReinstall()) {
 		$session->setSbReinstall(true);
 		$installer->reinstallSetupScript('1.0.0.70', '1.2.0.0');

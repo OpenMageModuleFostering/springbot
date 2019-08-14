@@ -17,8 +17,6 @@ class Springbot_Bmbleb_Adminhtml_Bmbleb_IndexController extends Mage_Adminhtml_C
 		} elseif($this->getRequest()->getParam('killharvest')) {
 			Springbot_Boss::halt();
 			$this->_redirect('*/*/status');
-		} elseif ($problems = Mage::helper('bmbleb/PluginStatus')->getPluginProblems()) {
-			$this->_redirect('*/adminhtml_problems/index');
 		}
 	}
 
@@ -28,7 +26,7 @@ class Springbot_Bmbleb_Adminhtml_Bmbleb_IndexController extends Mage_Adminhtml_C
 			Springbot_Cli::launchHarvestInline();
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 		$this->_redirect('*/*/status');
 		return;

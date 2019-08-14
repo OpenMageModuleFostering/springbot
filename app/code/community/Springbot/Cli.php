@@ -170,6 +170,7 @@ class Springbot_Cli
 				self::$_phpExec = $php;
 			}
 			catch (Exception $e) {
+				Springbot_Log::error($e->getMessage());
 				return '';
 			}
 		}

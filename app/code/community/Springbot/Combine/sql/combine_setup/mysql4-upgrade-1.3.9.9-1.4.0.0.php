@@ -34,7 +34,7 @@ try {
 
 } catch (Exception $e) {
 	Springbot_Log::error('Springbot 1.2.1.0-1.4.0.0 update failed!');
-	Springbot_Log::error(new Exception('Install failed clear and retry. ' . $e->getMessage()));
+	Springbot_Log::error('Install failed clear and retry. ' . $e->getMessage());
 	if (!$session->getSbReinstall()) {
 		$session->setSbReinstall(true);
 		$installer->reinstallSetupScript('1.2.1.0', '1.4.0.0');
@@ -44,7 +44,7 @@ try {
 try {
 	$installer->run("ALTER TABLE `{$installer->getTable('combine/cron_queue')}` ADD COLUMN `next_run_at` DATETIME NULL AFTER `error`;");
 } catch (Exception $e) {
-	// Don't do anything
+	Springbot_Log::error($e->getMessage());
 }
 
 $installer->endSetup();

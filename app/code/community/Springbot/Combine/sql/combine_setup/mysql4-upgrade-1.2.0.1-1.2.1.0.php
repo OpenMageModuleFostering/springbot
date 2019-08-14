@@ -41,7 +41,7 @@ $installer->run("
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 } catch (Exception $e) {
-	Springbot_Log::error('Springbot 1.2.0.0-1.2.1.0 update failed!');
+	Springbot_Log::error('Springbot 1.2.0.0-1.2.1.0 update failed: ' . $e->getMessage());
 }
 
 $installer->endSetup();

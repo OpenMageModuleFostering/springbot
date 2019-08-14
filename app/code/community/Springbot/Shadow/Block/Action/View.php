@@ -4,7 +4,7 @@ class Springbot_Shadow_Block_Action_View extends Mage_Core_Block_Template
 {
 	protected function _toHtml()
 	{
-		return '<img src="' . $this->_getPixelUrl() . '"style="position:absolute; visibility:hidden">';
+		return '<img src="' . $this->_getPixelUrl() . ' " style="position:absolute; visibility:hidden">';
 	}
 
 	private function _getPixelUrl()

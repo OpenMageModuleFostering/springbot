@@ -56,7 +56,7 @@ class Springbot_BoneCollector_Model_HarvestRule_Observer extends Springbot_BoneC
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 
 	}
@@ -75,7 +75,7 @@ class Springbot_BoneCollector_Model_HarvestRule_Observer extends Springbot_BoneC
 			);
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

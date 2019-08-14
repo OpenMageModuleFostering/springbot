@@ -68,7 +68,12 @@ class Springbot_Services_Cmd_Healthcheck extends Springbot_Services
 		$couponsToPost->getSelect()->order('coupon_id', 'ASC');
 		$lastFoundCouponId = null;
 		foreach ($couponsToPost as $couponToPost) {
-			Springbot_Boss::scheduleJob('post:coupon', array('i' => $couponToPost->getId()), Springbot_Services::LISTENER, 'listener');
+			Springbot_Boss::scheduleJob(
+				'post:coupon',
+				array('i' => $couponToPost->getId(), 's' => $this->getStoreId()),
+				Springbot_Services::LISTENER,
+				'listener'
+			);
 			$lastFoundCouponId = $couponToPost->getId();
 		}
 		if (($lastFoundCouponId) && ($lastPostedCouponId != $lastFoundCouponId)) {

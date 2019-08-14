@@ -59,12 +59,11 @@ class Springbot_Boss
 	{
 		if(self::active()) {
 			if(!isset($data['type']) || !isset($data['store_id'])) {
-				Springbot_Log::error(new Exception("Invalid action attempted to log"));
+				Springbot_Log::error("Invalid action attempted to log");
 				return;
 			}
 			$event = Mage::getModel('combine/action');
 			$event->setData($data);
-			$event->setVisitorIp(Mage::helper('core/http')->getRemoteAddr(true));
 			$event->save();
 
 			Springbot_Log::debug($event->getData());

@@ -53,6 +53,7 @@ class Springbot_Shadow_IndexController extends Springbot_Shadow_Controller_Actio
 			}
 
 		} catch (Exception $e) {
+			Springbot_Log::error($e->getMessage());
 			$helper = Mage::helper('shadow/prattler');
 			$this->getResponse()->setHeader('Content-type', 'application/json');
 			$this->getResponse()->setBody(json_encode($helper->getExceptionResponse($e)));

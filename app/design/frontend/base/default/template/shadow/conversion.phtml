@@ -6,8 +6,18 @@
 		$order = Mage::getModel('sales/order')->load($lastOrderId);
 		$total = $order->getGrandTotal();
 		$escapedOrderId = $this->escapeHtml($lastOrderId);
+
+		Springbot_Boss::addTrackable(
+			'success_page_url',
+			Mage::helper('core/url')->getCurrentUrl(),
+			$order->getQuoteId(),
+			$order->getCustomerId(),
+			$order->getCustomerEmail(),
+			$order->getEntityId()
+		);
+
 	} catch (Exception $e) {
-		Springbot_Log::error($e);
+		Springbot_Log::error($e->getMessage());
 	}
 ?>
 

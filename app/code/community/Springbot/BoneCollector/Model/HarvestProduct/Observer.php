@@ -34,7 +34,7 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 			}
 
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -56,7 +56,7 @@ class Springbot_BoneCollector_Model_HarvestProduct_Observer extends Springbot_Bo
 			}
 			Mage::helper('combine/harvest')->deleteRemote($post, 'products');
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

@@ -80,7 +80,7 @@ class Springbot_Combine_Model_Cron_Queue extends Springbot_Combine_Model_Cron
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 
 		return $return;

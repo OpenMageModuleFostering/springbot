@@ -111,7 +111,9 @@ class Springbot_Combine_Helper_Harvest extends Mage_Core_Helper_Abstract
 		if(is_null($id)) {
 			try {
 				$id = $collection->getResource()->getIdFieldName();
-			} catch (Exception $e) {}
+			} catch (Exception $e) {
+				Springbot_Log::error($e->getMessage());
+			}
 		}
 
 		if(is_null($id)) {
@@ -250,7 +252,7 @@ class Springbot_Combine_Helper_Harvest extends Mage_Core_Helper_Abstract
 			}
 
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 			Springbot_Log::harvest("Unknown quantity of {$label} to harvest!");
 		}
 	}

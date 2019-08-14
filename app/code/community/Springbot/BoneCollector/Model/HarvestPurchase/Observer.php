@@ -1,4 +1,5 @@
 <?php
+
 class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_BoneCollector_Model_HarvestAbstract
 {
 	const ACTION = 'purchase';
@@ -10,7 +11,7 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 			Mage::helper('combine/trackable')->updateTrackables($order);
 			Springbot_Boss::addTrackable(
 				'purchase_user_agent',
-				$_SERVER['HTTP_USER_AGENT'],
+				Mage::helper('core/http')->getHttpUserAgent(),
 				$order->getQuoteId(),
 				$order->getCustomerId(),
 				$order->getCustomerEmail(),
@@ -19,7 +20,7 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 			$this->_schedulePurchasePost($order, true);
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -31,7 +32,7 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 			$this->_schedulePurchasePost($order, false);
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -60,9 +61,10 @@ class Springbot_BoneCollector_Model_HarvestPurchase_Observer extends Springbot_B
 					'quantity' => $qty,
 				));
 			}
+
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

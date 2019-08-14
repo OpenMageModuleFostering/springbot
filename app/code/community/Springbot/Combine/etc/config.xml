@@ -2,9 +2,33 @@
 <config>
 	<modules>
 		<Springbot_Combine>
-			<version>1.4.6.2</version>
+			<version>1.5.2.5</version>
 		</Springbot_Combine>
 	</modules>
+	<default>
+		<carriers>
+			<sbShipping>
+				<active>1</active>
+				<allowed_methods>sbShipping</allowed_methods>
+				<methods>sbShipping</methods>
+				<sallowspecific>0</sallowspecific>
+				<model>Springbot_Combine_Model_Marketplaces_Shipping</model>
+				<name>Amazon Marketplaces Shipping</name>
+				<title>Amazon Marketplaces Shipping</title>
+				<handling_type>F</handling_type>
+			</sbShipping>
+		</carriers>
+		<payment>
+			<sbPayment>
+				<active>1</active>
+				<model>Springbot_Combine_Model_Marketplaces_Payment</model>
+				<order_status>pending</order_status>
+				<title>Amazon Marketplaces Payment</title>
+				<allowspecific>0</allowspecific>
+				<group>offline</group>
+			</sbPayment>
+		</payment>
+	</default>
 	<global>
 		<models>
 			<combine>
@@ -33,6 +57,9 @@
 					<cron_count>
 						<table>springbot_cron_count</table>
 					</cron_count>
+					<marketplaces_remote_order>
+						<table>springbot_mp_remote_order</table>
+					</marketplaces_remote_order>
 				</entities>
 			</combine_resource>
 		</models>
@@ -86,7 +113,7 @@
 				<filesize_limit>10000000</filesize_limit>
 			</debug>
 			<advanced>
-				<harvester_type>cron</harvester_type>
+				<harvester_type>prattler</harvester_type>
 				<max_jobs>10</max_jobs>
 				<nice>0</nice>
 				<nohup>0</nohup>

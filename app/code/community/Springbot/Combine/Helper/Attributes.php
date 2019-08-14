@@ -103,7 +103,7 @@ class Springbot_Combine_Helper_Attributes extends Mage_Core_Helper_Abstract
 					->toOptionArray();
 			}
 		} catch (Exception $e) {
-			// onward! We don't stop for poor api design.
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

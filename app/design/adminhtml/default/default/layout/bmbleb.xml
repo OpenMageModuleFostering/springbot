@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <layout>
-
+	<adminhtml_sales_order_view>
+		<reference name="order_info">
+			<block type="bmbleb/adminhtml_order_marketplaces" name="bmbleb.order.marketplaces" template="bmbleb/order/marketplaces.phtml" before="order_history" />
+		</reference>
+	</adminhtml_sales_order_view>
 	<adminhtml_bmbleb_index_index>
 		<reference name="head">
 			<action method="addCss"><stylesheet>bmbleb/bmbleb.css</stylesheet></action>
@@ -123,5 +127,4 @@
 			<block type="bmbleb/adminhtml_notifications" name="bmbleb_notifications" template="bmbleb/notifications.phtml"/>
 		</reference>
 	</default>
-
 </layout>

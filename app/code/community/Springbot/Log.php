@@ -98,7 +98,7 @@ class Springbot_Log
     }
 
 
-    public static function error(Exception $e)
+    public static function error($e)
 	{
 		if(is_string($e)) {
 			$e = new Exception($e);
@@ -142,7 +142,12 @@ class Springbot_Log
 
 	public static function getRemoteAddress()
 	{
-		return isset($_SERVER['REMOTE_ADDR']) ? $remAddr=$_SERVER['REMOTE_ADDR'] : null;
+		if ($remoteIp = Mage::helper('core/http')->getRemoteAddr(true)) {
+			return $remoteIp;
+		}
+		else {
+			return null;
+		}
 	}
 
 	private static function _levelAllowed($level)

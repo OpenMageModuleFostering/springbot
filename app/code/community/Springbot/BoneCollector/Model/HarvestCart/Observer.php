@@ -24,7 +24,7 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 				if (Mage::helper('combine')->doSendQuote($json)) {
 					Springbot_Boss::addTrackable(
 						'cart_user_agent',
-						$_SERVER['HTTP_USER_AGENT'],
+						Mage::helper('core/http')->getHttpUserAgent(),
 						$quoteParser->getQuoteId(),
 						$quoteParser->getCustomerId(),
 						$quoteParser->getCustomerEmail()
@@ -42,7 +42,7 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -77,7 +77,7 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 			));
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -125,7 +125,7 @@ class Springbot_BoneCollector_Model_HarvestCart_Observer extends Springbot_BoneC
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

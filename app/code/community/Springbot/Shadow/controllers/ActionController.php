@@ -6,7 +6,7 @@ class Springbot_Shadow_ActionController extends Springbot_Shadow_Controller_Acti
 		$params = $this->getRequest()->getParams();
 
 		$params['type'] = 'view';
-		$params['visitor_ip'] = Mage::helper('core/http')->getRemoteAddr(true);
+		$params['visitor_ip'] = (string)ip2long(Mage::helper('core/http')->getRemoteAddr());
 
 		Springbot_Boss::insertEvent($params);
 

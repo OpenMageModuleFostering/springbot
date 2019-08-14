@@ -15,7 +15,7 @@ class Springbot_BoneCollector_Model_HarvestCustomer_Observer extends Springbot_B
 				Springbot_Boss::scheduleJob('post:customer', array('i' => $customerId), Springbot_Services::LISTENER, 'listener');
 			}
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -30,7 +30,7 @@ class Springbot_BoneCollector_Model_HarvestCustomer_Observer extends Springbot_B
 				'delete' => true,
 			))->run();
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 
@@ -46,7 +46,7 @@ class Springbot_BoneCollector_Model_HarvestCustomer_Observer extends Springbot_B
 			}
 		}
 		catch  (Exception $e) {
-			Springbot_Log::debug('Exception caught during attribute iteration for customer observer');
+			Springbot_Log::error('Exception caught during attribute iteration for customer observer: ' . $e->getMessage());
 		}
 
 

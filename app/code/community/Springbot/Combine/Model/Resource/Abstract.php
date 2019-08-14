@@ -10,7 +10,7 @@ abstract class Springbot_Combine_Model_Resource_Abstract extends Mage_Core_Model
 			$bind = $this->_convertDatetimesToString($bind);
 			$this->_insertIgnore($table, $bind);
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

@@ -27,6 +27,7 @@ class Springbot_Combine_Model_Resource_Setup extends Mage_Core_Model_Resource_Se
 				include $fileName;
 			}
 		} catch (Exception $e) {
+			Springbot_Log::error($e->getMessage());
 			Mage::logException($e);
 		}
 	}
@@ -48,6 +49,7 @@ class Springbot_Combine_Model_Resource_Setup extends Mage_Core_Model_Resource_Se
 			$this->fetchConfig();
 		} catch (Exception $e) {
 			Mage::logException($e);
+			Springbot_Log::error($e->getMessage());
 			$this->_setData('type', 'magento')
 				->_setData('error', 'General failure on install.');
 		}

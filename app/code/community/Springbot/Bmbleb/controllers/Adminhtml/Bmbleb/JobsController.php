@@ -46,6 +46,7 @@ class Springbot_Bmbleb_Adminhtml_Bmbleb_JobsController extends Mage_Adminhtml_Co
 					$job = $this->_loadJob($jobId);
 					$job->run();
 				} catch (Exception $e) {
+					Springbot_Log::error($e->getMessage());
 					Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 				}
 			}
@@ -63,6 +64,7 @@ class Springbot_Bmbleb_Adminhtml_Bmbleb_JobsController extends Mage_Adminhtml_Co
 				$job = $this->_loadJob($jobId);
 				$job->delete();
 			} catch (Exception $e) {
+				Springbot_Log::error($e->getMessage());
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			}
 		}

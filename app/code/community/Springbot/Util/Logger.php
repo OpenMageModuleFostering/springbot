@@ -46,6 +46,7 @@ class Springbot_Util_Logger
 			self::$_loggers[$file]->log($message, $level, $extras);
 		}
 		catch (Exception $e) {
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

@@ -4,6 +4,7 @@ class Springbot_Combine_Model_Parser_Subscriber extends Springbot_Combine_Model_
 {
 	const TYPE = 'SUBSCRIBER';
 	const SUBSCRIBER_MODE = 'NL';
+	const OFFSET = 200000000;
 
 	protected $_subscriber;
 
@@ -34,10 +35,9 @@ class Springbot_Combine_Model_Parser_Subscriber extends Springbot_Combine_Model_
 	protected function _buildCustomerId()
 	{
 		$customerId = $this->_subscriber->getCustomerId();
-
 		if(empty($customerId)) {
 			$id = $this->_subscriber->getSubscriberId();
-			$customerId = (int) str_pad($id, 9, '9', STR_PAD_LEFT);
+			$customerId = $id + self::OFFSET;
 		}
 		return $customerId;
 	}

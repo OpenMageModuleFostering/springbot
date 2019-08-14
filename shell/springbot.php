@@ -30,7 +30,7 @@ class Springbot_Shell
 			echo $ret;
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 			echo $e->getMessage() . PHP_EOL;
 			exit(1);
 		}
@@ -71,7 +71,7 @@ class Springbot_Shell
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 			$this->_usage();
 			exit;
 		}

@@ -37,7 +37,9 @@ class Springbot_Services_Harvest_Guests extends Springbot_Services_Harvest
 			try {
 				$collection->getSelect()->order('increment_id')->group('customer_email');
 			}
-			catch (Exception $e) { }
+			catch (Exception $e) {
+				Springbot_Log::error($e->getMessage());
+			}
 		}
 
 		return $collection;

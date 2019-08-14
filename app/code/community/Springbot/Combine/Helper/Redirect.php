@@ -72,7 +72,7 @@ class Springbot_Combine_Helper_Redirect extends Mage_Core_Helper_Abstract
 				$output[] = $value;
 			} else {
 				$ip = Mage::helper('core/http')->getRemoteAddr();
-				Springbot_Log::error(new Exception("{$value} attempted to pass as cookie param from {$ip}. Possible insertion attack."));
+				Springbot_Log::error("{$value} attempted to pass as cookie param from {$ip}. Possible insertion attack.");
 				Springbot_Boss::setCookie(Springbot_Boss::COOKIE_NAME, '');
 			}
 		}

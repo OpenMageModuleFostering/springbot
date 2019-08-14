@@ -12,6 +12,7 @@ class Springbot_Services_Tasks_ClearCache extends Springbot_Services
 			return true;
 		}
 		catch (Exception $e) {
+			Springbot_Log::error($e->getMessage());
 			return array(
 				'success' => false,
 				'message' => $e->getMessage()

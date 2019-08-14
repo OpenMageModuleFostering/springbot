@@ -76,7 +76,7 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services
 
         $this->_init();
 
-        //Iterate all stores
+        // Iterate all stores
         foreach ($this->getHelper()->getStoresToHarvest() as $store) {
             $this->_harvestId = Mage::helper('combine/harvest')->initRemoteHarvest($store->getStoreId());
             $this->_harvestStore($store, self::getClasses(), $this->_harvestId);
@@ -165,84 +165,25 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services
 
     }
 
-    /**
-     * True if the version of Magento currently being rune is Enterprise Edition
-     */
-    public function isMageEnterprise() {
-        return Mage::getConfig ()->getModuleConfig ( 'Enterprise_Enterprise' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_AdminGws' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_Checkout' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_Customer' );
-    }
 
-    /**
-     * True if the version of Magento currently being rune is Enterprise Edition
-     */
-    public function isMageProfessional() {
-        return Mage::getConfig ()->getModuleConfig ( 'Enterprise_Enterprise' ) && !Mage::getConfig ()->getModuleConfig ( 'Enterprise_AdminGws' ) && !Mage::getConfig ()->getModuleConfig ( 'Enterprise_Checkout' ) && !Mage::getConfig ()->getModuleConfig ( 'Enterprise_Customer' );
-    }
-
-    /**
-     * True if the version of Magento currently being rune is Enterprise Edition
-     */
-    public function isMageCommunity() {
-        return !$this->isMageEnterprise() && !$this->isMageProfessional();
-    }
 
     private function _registerInstagramRewrites($store)
     {
-        // cache the store name to sanitize
-        $storeName = $store->getGroup()->getName();
+        if ($springbotStoreId = $this->getHelper()->getSpringbotStoreId($store->getStoreId())) {
+            // cache the store name to sanitize
+            $storeName = $store->getGroup()->getName();
 
-        // strip out the dot if it exists in store name
-        if (strpos($storeName, ".") !== false) {
-            $storeName = str_replace('.', '', $storeName);
-        }
-
-        // check if community edition
-        if ($this->isMageCommunity()) {
-            // check if rewrites already exist
-            $existingRewrite = Mage::getModel('core/url_rewrite')->loadByIdPath("springbot/{$store->getStoreId()}");
-
-            // if they don't...
-            if ($existingRewrite->getUrlRewriteId() == null) {
-                if ($springbotStoreId = $this->getHelper()->getSpringbotStoreId($store->getStoreId())) {
-                    try {
-                        $encodedStoreName = urlencode($storeName);
-                        Mage::getModel('core/url_rewrite')
-                            ->setIsSystem(0)
-                            ->setStoreId($store->getStoreId())
-                            ->setOptions('RP')
-                            ->setIdPath('springbot/' . $store->getStoreId())
-                            ->setTargetPath("https://app.springbot.com/i/{$springbotStoreId}/{$encodedStoreName}")
-                            ->setRequestPath('i')
-                            ->save();
-                    } catch (Exception $e) {
-                        Springbot_Log::debug("Unable to create instagram URL rewrite for store id " . $store->getStoreId());
-                    }
-                }
+            // strip out the dot if it exists in store name
+            if (strpos($storeName, ".") !== false) {
+                $storeName = str_replace('.', '', $storeName);
             }
-        }
 
-        // check if enterprise edition
-        if ($this->isMageEnterprise()) {
-            $existingRewrite = Mage::getModel('enterprise_urlrewrite/redirect')->getCollection()
-                ->addFieldToFilter('target_path', "https://app.springbot.com/i/{$springbotStoreId}/{$encodedStoreName}")
-                ->getFirstItem();
-            if (!$existingRewrite->getId()) {
-                if ($springbotStoreId = $this->getHelper()->getSpringbotStoreId($store->getStoreId())) {
-                    try {
-                        $encodedStoreName = urlencode($store->getGroup()->getName());
+            $rewrite = Mage::getModel('combine/rewrite');
+            $encodedStoreName = urlencode($storeName);
 
-                        Mage::getModel('enterprise_urlrewrite/redirect')
-                            ->setStoreId($store->getStoreId())
-                            ->setOptions('RP')
-                            ->setRequestPath('i')
-                            ->setIdentifier('i')
-                            ->setTargetPath("https://app.springbot.com/i/{$springbotStoreId}/{$encodedStoreName}")
-                            ->save();
-                    } catch (Exception $e) {
-                        Springbot_Log::debug("Unable to create instagram URL rewrite for store id " . $store->getStoreId());
-                    }
-                }
-            }
+            $path = "springbot/{$store->getStoreId()}";
+            $targetPath = "https://app.springbot.com/i/{$springbotStoreId}/{$encodedStoreName}";
+            $rewrite->createRewrite($store, $path, 'i', $targetPath);
         }
     }
 
@@ -284,7 +225,6 @@ class Springbot_Services_Cmd_Harvest extends Springbot_Services
                 'partition', // Partition queue
                 $storeId
             );
-            //Mage::getModel('core/config')->saveConfig('springbot/config/harvest_cursor', $key . '|' . $partition->fromStart() . '|' . $storeId);
         }
         $scheduler->insert();
 

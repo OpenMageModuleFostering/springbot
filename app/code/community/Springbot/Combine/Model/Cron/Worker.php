@@ -27,7 +27,7 @@ class Springbot_Combine_Model_Cron_Worker extends Mage_Core_Model_Abstract
 				} while ($job && ($count < $maxJobs));
 			}
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

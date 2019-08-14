@@ -20,7 +20,7 @@ class Springbot_Bmbleb_Block_Adminhtml_Notifications extends Mage_Adminhtml_Bloc
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 		return false;
 	}

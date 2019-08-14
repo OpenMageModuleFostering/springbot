@@ -12,6 +12,6 @@ try {
 	}
 }
 catch (Exception $e) {
-	Springbot_Log::error($e);
+	Springbot_Log::error($e->getMessage());
 }
 $installer->endSetup();

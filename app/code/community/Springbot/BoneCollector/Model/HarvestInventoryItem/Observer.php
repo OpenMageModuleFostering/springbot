@@ -23,7 +23,7 @@ class Springbot_BoneCollector_Model_HarvestInventoryItem_Observer extends Spring
 				}
 			}
 			catch (Exception $e) {
-				Springbot_Log::error($e);
+				Springbot_Log::error($e->getMessage());
 			}
 		}
 	}
@@ -40,7 +40,7 @@ class Springbot_BoneCollector_Model_HarvestInventoryItem_Observer extends Spring
 					);
 				}
 				catch (Exception $e) {
-					Springbot_Log::error($e);
+					Springbot_Log::error($e->getMessage());
 				}
 			}
 		}
@@ -57,7 +57,7 @@ class Springbot_BoneCollector_Model_HarvestInventoryItem_Observer extends Spring
 				);
 			}
 			catch (Exception $e) {
-				Springbot_Log::error($e);
+				Springbot_Log::error($e->getMessage());
 			}
 		}
 	}
@@ -81,7 +81,7 @@ class Springbot_BoneCollector_Model_HarvestInventoryItem_Observer extends Spring
 				}
 			}
 			catch (Exception $e) {
-				Springbot_Log::error($e);
+				Springbot_Log::error($e->getMessage());
 			}
 		}
 

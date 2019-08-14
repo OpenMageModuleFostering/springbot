@@ -26,7 +26,7 @@ class Springbot_Combine_Model_Redirect_Order extends Mage_Core_Model_Abstract
 			}
 		} catch(Exception $e) {
 			$this->_getResource()->rollBack();
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 
 		return $this;

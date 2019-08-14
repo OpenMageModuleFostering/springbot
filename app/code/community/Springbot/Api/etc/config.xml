@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Springbot_Api>
+			<version>0.1.0</version>
+		</Springbot_Api>
+	</modules>
+	<frontend>
+		<routers>
+			<springbot_api>
+				<use>standard</use>
+				<args>
+					<module>Springbot_Api</module>
+					<frontName>springbot_api</frontName>
+				</args>
+			</springbot_api>
+		</routers>
+	</frontend>
+</config>

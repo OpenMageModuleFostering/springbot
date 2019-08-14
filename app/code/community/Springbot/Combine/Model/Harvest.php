@@ -119,7 +119,7 @@ abstract class Springbot_Combine_Model_Harvest
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 	}
 

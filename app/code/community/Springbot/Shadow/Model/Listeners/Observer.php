@@ -11,7 +11,7 @@ class Springbot_Shadow_Model_Listeners_Observer	{
 			}
 		}
 		catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 		}
 		return;
 	}

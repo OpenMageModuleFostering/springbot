@@ -46,6 +46,8 @@ class Springbot_Combine_Model_Parser_Purchase extends Springbot_Combine_Model_Pa
 			'line_items' => $this->_getLineItems(),
 			'attribute_items' => $this->_getAttributeArray(),
 			'json_data' => $this->_getJsonData(),
+			'shipments' => $this->_getShipments(),
+			'marketplaces' => $this->_getMarketplacesDetail(),
 		));
 
 		return parent::_parse();
@@ -70,6 +72,17 @@ class Springbot_Combine_Model_Parser_Purchase extends Springbot_Combine_Model_Pa
 	protected function _getSbParams($quoteId)
 	{
 		return Mage::helper('combine/trackable')->getTrackablesHashByQuote($quoteId);
+	}
+
+	protected function _getShipments()
+	{
+		$shipments = array();
+		foreach($this->_purchase->getShipmentsCollection() as $shipment) {
+			foreach($shipment->getAllTracks() as $track) {
+				$shipments[] = Mage::getModel('combine/parser_purchase_shipment', $track)->getData();
+			}
+		}
+		return empty($shipments) ? null : $shipments;
 	}
 
 	protected function _getLineItems()
@@ -162,5 +175,18 @@ class Springbot_Combine_Model_Parser_Purchase extends Springbot_Combine_Model_Pa
 		$email = $model->getCustomerEmail();
 
 		return $email;
+	}
+
+	private function _getMarketplacesDetail()
+	{
+		$mpOrder = Mage::getModel('combine/marketplaces_remote_order')
+			->load($this->_purchase->getIncrementId(), 'increment_id');
+
+		if ($mpOrder) {
+			return array(
+				'mp_type' => $mpOrder->getMarketplaceType(),
+				'remote_order_id' => $mpOrder->getRemoteOrderId(),
+			);
+		}
 	}
 }

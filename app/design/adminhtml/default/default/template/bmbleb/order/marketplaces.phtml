@@ -1,0 +1,23 @@
+<?php $order = $this->getOrder() ?>
+<?php $mpOrder = $this->getMarketplacesOrder() ?>
+<div class="box-left">
+		<!--Marketplaces Detail-->
+		<div class="entry-edit">
+				<div class="entry-edit-head">
+						<h4 class="icon-head head-account">Marketplaces Detail</h4>
+				</div>
+				<div class="fieldset">
+						<table cellspacing="0" class="form-list">
+							<tr>
+									<td class="label"><label><?php echo $this->__('Marketplace') ?></label></td>
+									<td class="value"><strong><?php echo $mpOrder->getHumanMarketplaceType() ?></strong></td>
+							</tr>
+							<tr>
+									<td class="label"><label><?php echo $this->__('Remote Order Id') ?></label></td>
+									<td class="value"><strong><a href="https://sellercentral.amazon.com/gp/orders-v2/details/ref=ag_orddet_cont_myo?ie=UTF8&orderID=<?php echo $mpOrder->getRemoteOrderId() ?>" target="_blank"><?php echo $mpOrder->getRemoteOrderId() ?></a></strong></td>
+							</tr>
+						</table>
+				</div>
+		</div>
+</div>
+<div class="clear"></div>

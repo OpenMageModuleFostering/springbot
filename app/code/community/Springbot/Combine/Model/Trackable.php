@@ -73,7 +73,4 @@ class Springbot_Combine_Model_Trackable extends Mage_Core_Model_Abstract
 		return !$this->isObjectEmpty($sbParams) ? $sbParams : new stdClass();
 	}
 
-
-
-
 }

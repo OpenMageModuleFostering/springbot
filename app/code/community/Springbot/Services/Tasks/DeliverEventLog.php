@@ -22,7 +22,7 @@ class Springbot_Services_Tasks_DeliverEventLog extends Springbot_Services
 		} catch (Exception $e) {
 			// We can capture this here and keep if from bubbling up.
 			// This api call will fail and get recreated on the next check in
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 			$successful = false;
 		}
 		$this->_releaseLocks();

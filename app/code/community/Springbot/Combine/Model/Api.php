@@ -74,7 +74,7 @@ class Springbot_Combine_Model_Api extends Varien_Object
 			}
 			Springbot_Log::http($payload);
 		} catch (Exception $e) {
-			Springbot_Log::error($e);
+			Springbot_Log::error($e->getMessage());
 			$code = isset($result['status']) ? $result['status'] : 'null';
 			throw new Exception("$method call failed with code: $code");
 		}
